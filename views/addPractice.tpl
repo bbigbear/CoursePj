@@ -12,43 +12,38 @@
 				<div class="col-sm-9">
 					<div class="panel panel-primary">
 						<div class="panel-heading">
-							<h3 class="panel-title">录入理论课程信息</h3>
+							<h3 class="panel-title">录入实践环节信息</h3>
 						</div>
 					    <div class="panel-body">
-						<form class="form-horizontal" method="POST" id="addCourse">
+						<form class="form-horizontal" method="POST" id="addPractice">
 					        <div class="form-group">				
-								<label class="col-sm-2 control-label">课程代码</label>			
+								<label class="col-sm-2 control-label">环节代码</label>			
 								<div class="col-sm-10">
-								<input class="form-control" name="Cid" id="cid">
+								<input class="form-control" name="Pid" id="pid">
 								</div>
 							</div>
 							<div class="form-group">				
 								<label class="col-sm-2 control-label">开课单位</label>			
 								<div class="col-sm-10">
-								<input class="form-control" name="Cunit">
+								<input class="form-control" name="Punit">
 								</div>
 							</div>
 							<div class="form-group">				
-								<label class="col-sm-2 control-label">课程名称</label>			
+								<label class="col-sm-2 control-label">环节名称</label>			
 								<div class="col-sm-10">
-								<input class="form-control" name="Cname">
+								<input class="form-control" name="Pname">
 								</div>
 							</div>
 							<div class="form-group">				
-								<label class="col-sm-2 control-label">课程类别</label>			
-								<div class="col-sm-5">
-								<input class="form-control" name="Ccg1">
-								
-								</div>
-								<div class="col-sm-5">
-								<input class="form-control" name="Ccg2">								
-								</div>
-								
+								<label class="col-sm-2 control-label">环节类别</label>			
+								<div class="col-sm-10">
+								<input class="form-control" name="Pcg1">
+								</div>					
 							</div>
 							<div class="form-group">				
 								<label class="col-sm-2 control-label">英文名称</label>			
 								<div class="col-sm-10">
-								<input class="form-control" name="Cname_en">
+								<input class="form-control" name="Pname_en">
 								</div>
 							</div>
 							<div class="form-group">				
@@ -64,33 +59,15 @@
 								</div>
 							</div>
 							<div class="form-group">				
-								<label class="col-sm-2 control-label">授课学时</label>			
+								<label class="col-sm-2 control-label">学时</label>			
 								<div class="col-sm-10">
-								<input class="form-control" name="Tteach">
+								<input class="form-control" name="Tclass">
 								</div>
 							</div>
 							<div class="form-group">				
-								<label class="col-sm-2 control-label">实验学时</label>			
+								<label class="col-sm-2 control-label">周数</label>			
 								<div class="col-sm-10">
-								<input class="form-control" name="Texperiment">
-								</div>
-							</div>
-							<div class="form-group">				
-								<label class="col-sm-2 control-label">上机学时</label>			
-								<div class="col-sm-10">
-								<input class="form-control" name="Tcomputer">
-								</div>
-							</div>
-							<div class="form-group">				
-								<label class="col-sm-2 control-label">其他学时</label>			
-								<div class="col-sm-10">
-								<input class="form-control" name="Tother">
-								</div>
-							</div>
-							<div class="form-group">				
-								<label class="col-sm-2 control-label">总学时</label>			
-								<div class="col-sm-10">
-								<input class="form-control" name="Ttotal">
+								<input class="form-control" name="Nw">
 								</div>
 							</div>
 							<div class="form-group">				
@@ -117,16 +94,16 @@
 		</div>
 		<script type="text/javascript">
 			function AddInput(){
-				var cid=document.getElementById("cid")
-				if(cid.value.length==0){
-					alert("课程代码不能为空")
+				var cid=document.getElementById("pid")
+				if(pid.value.length==0){
+					alert("实践环节不能为空")
 					return false
 				}
 				
 				$.ajax({
 					type:"POST",
-					url:"{{urlfor "HomeController.TheoryCourseAddAction"}}",
-					data:$("#addCourse").serialize(),
+					url:"{{urlfor "PracticeController.PracticeAddAction"}}",
+					data:$("#addPractice").serialize(),
 					async:false,
 					error:function(request){
 						alert("post error")
@@ -135,7 +112,7 @@
 					success:function(data){
 						if(data.status==0){
 							alert("新增成功")
-							window.location.href="/home/add"
+							window.location.href="/practice/add"
 						}else{
 							alert("新增失败，已有重复的课程代码")
 						}

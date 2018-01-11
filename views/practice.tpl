@@ -13,15 +13,15 @@
 				<div class="col-sm-10">
 					<div class="panel panel-primary">
 						<div class="panel-heading">
-							<h4 class="panel-title">查询理论课程信息</h4>
+							<h4 class="panel-title">查询实践环节信息</h4>
 						</div>
 					    <div class="panel-body">
-						<form class="form-inline" role="form" id="searchCourse">
+						<form class="form-inline" role="form" id="searchPractive">
 					        <div class="form-group">				
 								<label>开课单位</label>			
-								<input class="form-control" name="s_Cunit" id="s_Cunit">
-								<label>课程名称</label>			
-								<input class="form-control" name="s_Cname" id="s_Cname">
+								<input class="form-control" name="s_Punit" id="s_Punit">
+								<label>环节名称</label>			
+								<input class="form-control" name="s_Pname" id="s_Pname">
 								<button type="button" class="btn btn-default" onclick="return QueryInput()">检索</button>				
 							</div>
 						</form>
@@ -32,42 +32,34 @@
 					</div>
 					<div class="table-responsive">
 						<table class="table table-bordered">
-							<caption><h4 class="panel-title">理论课程信息</h4></caption>
+							<caption><h4 class="panel-title">实践环节信息</h4></caption>
 							<thead>
 								<tr>
 									<th>操作</th>
-									<th>课程代码</th>
+									<th>环节代码</th>
 									<th>开课单位</th>
-									<th>课程名称</th>
-									<th>课程类别1</th>
-									<th>课程类别2</th>
+									<th>环节名称</th>
+									<th>环节类别1</th>
 									<th>英文名称</th>
 									<th>状态</th>
 									<th>学分</th>
-									<th>授课学时</th>
-									<th>实验学时</th>
-									<th>上机学时</th>
-									<th>其他学时</th>
-									<th>总学时</th>
+									<th>学时</th>
+									<th>周数</th>
 									<th>年级</th>
 									<th>教学大纲</th>
 								</tr>
 								{{range .m}}
 								<tr>
-									<th><a href="/home/edit?cid={{.Cid}}">编辑</a></th>
-									<th>{{.Cid}}</th>
-									<th>{{.Cunit}}</th>
-									<th>{{.Cname}}</th>
-									<th>{{.Ccg1}}</th>
-									<th>{{.Ccg2}}</th>
-									<th>{{.Cname_en}}</th>
+									<th><a href="/practice/edit?pid={{.Pid}}">编辑</a></th>
+									<th>{{.Pid}}</th>
+									<th>{{.Punit}}</th>
+									<th>{{.Pname}}</th>
+									<th>{{.Pcg1}}</th>
+									<th>{{.Pname_en}}</th>
 									<th>{{.Status}}</th>
 									<th>{{.Credit}}</th>
-									<th>{{.Tteach}}</th>
-									<th>{{.Texperiment}}</th>
-									<th>{{.Tcomputer}}</th>
-									<th>{{.Tother}}</th>
-									<th>{{.Ttotal}}</th>
+									<th>{{.Tclass}}</th>
+									<th>{{.Nw}}</th>>
 									<th>{{.Year}}</th>
 									<th>{{.Syllabus}}</th>
 								</tr>							
@@ -83,12 +75,12 @@
 		<script type="text/javascript">
 			
 			function QueryInput(){
-				var s_Cunit=document.getElementById("s_Cunit")
-				var s_Cname=document.getElementById("s_Cname")
-				window.location.href="/home/search?s_Cunit="+s_Cunit.value+"&s_Cname="+s_Cname.value
+				var s_Punit=document.getElementById("s_Punit")
+				var s_Pname=document.getElementById("s_Pname")
+				window.location.href="/practice/search?s_Punit="+s_Punit.value+"&s_Pname="+s_Pname.value
 			}
 			function AddInput(){
-				window.location.href="/home/add"
+				window.location.href="/practice/add"
 			}
 		</script>
 	</body>

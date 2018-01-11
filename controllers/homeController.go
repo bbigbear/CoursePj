@@ -53,8 +53,10 @@ func (this *HomeController) TheoryCourseAddAction() {
 //检索
 func (this *HomeController) TheoryCourseSearch() {
 	fmt.Println("post查询")
-	Cunit := strings.TrimSpace(this.GetString("s_Cunit"))
-	Cname := strings.TrimSpace(this.GetString("s_Cname"))
+	//	Cunit := strings.TrimSpace(this.GetString("s_Cunit"))
+	//	Cname := strings.TrimSpace(this.GetString("s_Cname"))
+	Cunit := this.Input().Get("s_Cunit")
+	Cname := this.Input().Get("s_Cname")
 	fmt.Println(Cunit)
 	fmt.Println(Cname)
 	o := orm.NewOrm()
@@ -69,7 +71,6 @@ func (this *HomeController) TheoryCourseSearch() {
 			fmt.Println(m["Cunit"], m["Cid"])
 		}
 	}
-	this.ajaxMsg("", MSG_OK)
 	this.TplName = "home.tpl"
 
 }
@@ -108,26 +109,21 @@ func (this *HomeController) TheoryCourseUpdata() {
 		this.ajaxMsg("", MSG_ERR)
 	}
 	this.ajaxMsg("", MSG_OK)
-	this.TplName = "editTheoryCourse.tpl"
 	return
 }
 
 //删除
-func (this *HomeController) TheoryCourseDelte() {
+func (this *HomeController) TheoryCourseDelete() {
 	fmt.Println("删除")
-	cid := this.Input().Get("cid")
-	fmt.Println(cid)
 	o := orm.NewOrm()
-	var maps []orm.Params
 	theoryCourse := new(models.TheoryCourse)
-	num, err := o.QueryTable(theoryCourse).Filter("Cid", cid).Values(&maps)
+	cid := strings.TrimSpace(this.GetString("cid"))
+	fmt.Println(cid)
+	num, err := o.QueryTable(theoryCourse).Filter("Cid", cid).Delete()
 	if err == nil {
+		fmt.Printf("删除成功")
 		fmt.Printf("Result Nums: %d\n", num)
-		this.Data["m"] = maps
-		for _, m := range maps {
-			fmt.Println(m["Cid"])
-		}
 	}
-	this.TplName = "editTheoryCourse.tpl"
+	this.ajaxMsg("", MSG_OK)
 	return
 }

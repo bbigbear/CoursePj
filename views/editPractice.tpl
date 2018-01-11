@@ -13,44 +13,39 @@
 				<div class="col-sm-9">
 					<div class="panel panel-primary">
 						<div class="panel-heading">
-							<h3 class="panel-title">编辑理论课程信息</h3>
+							<h3 class="panel-title">编辑实践环节信息</h3>
 						</div>
 					    <div class="panel-body">
 						{{range .m}}
-						<form class="form-horizontal" role="form" id="editCourse">
+						<form class="form-horizontal" role="form" id="editPractice">
 					        <div class="form-group">				
-								<label class="col-sm-2 control-label">课程代码</label>			
+								<label class="col-sm-2 control-label">环节代码</label>			
 								<div class="col-sm-10">
-								<input class="form-control" name="Cid" value="{{.Cid}}" id="cid">
+								<input class="form-control" name="Pid" value="{{.Pid}}" id="pid">
 								</div>
 							</div>
 							<div class="form-group">				
 								<label class="col-sm-2 control-label">开课单位</label>			
 								<div class="col-sm-10">
-								<input class="form-control" name="Cunit" value="{{.Cunit}}">
+								<input class="form-control" name="Punit" value="{{.Punit}}">
 								</div>
 							</div>
 							<div class="form-group">				
-								<label class="col-sm-2 control-label">课程名称</label>			
+								<label class="col-sm-2 control-label">环节名称</label>			
 								<div class="col-sm-10">
-								<input class="form-control" name="Cname" value="{{.Cname}}">
+								<input class="form-control" name="Pname" value="{{.Pname}}">
 								</div>
 							</div>
 							<div class="form-group">				
-								<label class="col-sm-2 control-label">课程类别</label>			
-								<div class="col-sm-5">
-								<input class="form-control" name="Ccg1" value="{{.Ccg1}}">
-								
-								</div>
-								<div class="col-sm-5">
-								<input class="form-control" name="Ccg2" value="{{.Ccg2}}">								
-								</div>
-								
+								<label class="col-sm-2 control-label">环节类别</label>			
+								<div class="col-sm-10">
+								<input class="form-control" name="Pcg1" value="{{.Pcg1}}">					
+								</div>	
 							</div>
 							<div class="form-group">				
 								<label class="col-sm-2 control-label">英文名称</label>			
 								<div class="col-sm-10">
-								<input class="form-control" name="Cname_en" value="{{.Cname_en}}">
+								<input class="form-control" name="Pname_en" value="{{.Pname_en}}">
 								</div>
 							</div>
 							<div class="form-group">				
@@ -66,35 +61,17 @@
 								</div>
 							</div>
 							<div class="form-group">				
-								<label class="col-sm-2 control-label">授课学时</label>			
+								<label class="col-sm-2 control-label">学时</label>			
 								<div class="col-sm-10">
-								<input class="form-control" name="Tteach" value="{{.Tteach}}">
+								<input class="form-control" name="Tclass" value="{{.Tclass}}">
 								</div>
 							</div>
 							<div class="form-group">				
-								<label class="col-sm-2 control-label">实验学时</label>			
+								<label class="col-sm-2 control-label">周数</label>			
 								<div class="col-sm-10">
-								<input class="form-control" name="Texperiment" value="{{.Texperiment}}">
+								<input class="form-control" name="Nw" value="{{.Nw}}">
 								</div>
-							</div>
-							<div class="form-group">				
-								<label class="col-sm-2 control-label">上机学时</label>			
-								<div class="col-sm-10">
-								<input class="form-control" name="Tcomputer" value="{{.Tcomputer}}">
-								</div>
-							</div>
-							<div class="form-group">				
-								<label class="col-sm-2 control-label">其他学时</label>			
-								<div class="col-sm-10">
-								<input class="form-control" name="Tother" value="{{.Tother}}">
-								</div>
-							</div>
-							<div class="form-group">				
-								<label class="col-sm-2 control-label">总学时</label>			
-								<div class="col-sm-10">
-								<input class="form-control" name="Ttotal" value="{{.Ttotal}}">
-								</div>
-							</div>
+							</div>			
 							<div class="form-group">				
 								<label class="col-sm-2 control-label">教学大纲</label>			
 								<div class="col-sm-10">
@@ -123,8 +100,8 @@
 			function UpdataInput(){
 				$.ajax({
 					type:"POST",
-					url:"{{urlfor "HomeController.TheoryCourseUpdata"}}",
-					data:$("#editCourse").serialize(),
+					url:"{{urlfor "PracticeController.PracticeUpdata"}}",
+					data:$("#editPractice").serialize(),
 					async:false,
 					error:function(request){
 						alert("post error")				
@@ -132,7 +109,7 @@
 					success:function(data){
 						if(data.status==0){
 							alert("更新成功")
-							window.location.href="/home"
+							window.location.href="/practice"
 						}else{
 							alert("更新失败")
 						}
@@ -143,11 +120,11 @@
 				return true	
 			}
 			function DeleteInput(){
-				var cid=document.getElementById("cid")
+				var pid=document.getElementById("pid")
 				$.ajax({
 					type:"POST",
-					url:"{{urlfor "HomeController.TheoryCourseDelete"}}",
-					data:{cid:cid.value},
+					url:"{{urlfor "PracticeController.PracticeDelete"}}",
+					data:{pid:pid.value},
 					async:false,
 					error:function(request){
 						alert("post error")				
@@ -155,7 +132,7 @@
 					success:function(data){
 						if(data.status==0){
 							alert("删除成功")
-							window.location.href="/home"
+							window.location.href="/practice"
 						}else{
 							alert("删除失败")
 						}
