@@ -23,4 +23,11 @@ func init() {
 	beego.Router("/practice/add", &controllers.PracticeController{}, "*:PracticeAdd")
 	beego.Router("/practice/search", &controllers.PracticeController{}, "*:PracticeSearch")
 	beego.AutoRouter(&controllers.PracticeController{})
+
+	//专业信息
+	beego.Router("/pm", &controllers.PmController{})
+	beego.Router("/pm/edit", &controllers.PmController{}, "*:PmEdit")
+	beego.Router("/pm/add", &controllers.PmController{}, "*:PmAdd")
+	beego.Router("/pm/search", &controllers.PmController{}, "*:PmSearch")
+	beego.AutoRouter(&controllers.PmController{})
 }
