@@ -59,7 +59,7 @@
 									<th>{{.Status}}</th>
 									<th>{{.Credit}}</th>
 									<th>{{.Tclass}}</th>
-									<th>{{.Nw}}</th>>
+									<th>{{.Nw}}</th>
 									<th>{{.Year}}</th>
 									<th>{{.Syllabus}}</th>
 								</tr>							

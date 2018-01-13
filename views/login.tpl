@@ -6,7 +6,7 @@
 	<body>
 		<div class="container" style="width:300px;padding-top:150px">
 			<form class="form-signin" method="POST" action="/login">
-		        <h2 class="form-signin-heading">课程中心</h2>
+		        <h2 class="form-signin-heading">课程管理系统</h2>
 		        <label for="inputAccount" class="sr-only">学号</label>
 		        <input id="inputAccount" class="form-control" placeholder="学号" required autofocus name="inputAccount">
 		        <label for="inputPassword" class="sr-only">密码</label>

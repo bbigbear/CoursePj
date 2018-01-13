@@ -6,6 +6,7 @@
 		<script type="text/javascript" src="/static/js/bootstrap.min.js"></script>
 	</head>
 	<body>
+		{{template "TopBar"}}
 		<div class="container-fluid" style="padding-top:50px">
       		<div class="row">
         		{{template "LeftBar"}}
@@ -31,7 +32,7 @@
 							<div class="form-group">				
 								<label class="col-sm-2 control-label">院系</label>			
 								<div class="col-sm-10">
-								<input class="form-control" name="faculty">
+								<input class="form-control" name="Faculty">
 								</div>
 							</div>
 							<div class="form-group">				
@@ -55,13 +56,21 @@
 							<div class="form-group">				
 								<label class="col-sm-2 control-label">状态</label>			
 								<div class="col-sm-10">
-								<input class="form-control" name="Status">
+								<select class="form-control" name="Status" id="Status">
+								<option>停用</option>
+								<option>可用</option>
+								</select>
 								</div>
 							</div>
 							<div class="form-group">				
 								<label class="col-sm-2 control-label">年级</label>			
 								<div class="col-sm-10">
-								<input class="form-control" name="Year">
+								<select class="form-control" name="Year">
+								<option>2015</option>
+								<option>2016</option>
+								<option>2017</option>
+								<option>2018</option>
+								</select>
 								</div>
 							</div>
 							<div class="form-group">							
@@ -78,7 +87,7 @@
 			function AddInput(){
 				var cid=document.getElementById("pmid")
 				if(pmid.value.length==0){
-					alert("实践环节不能为空")
+					alert("专业代码不能为空")
 					return false
 				}
 				
@@ -96,7 +105,7 @@
 							alert("新增成功")
 							window.location.href="/pm/add"
 						}else{
-							alert("新增失败，已有重复的课程代码")
+							alert("新增失败")
 						}
 						
 					}

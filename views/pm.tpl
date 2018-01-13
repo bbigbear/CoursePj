@@ -156,18 +156,18 @@
 			}
 			function ToAble(){
 				var checked_array=[];
+				var data="";
 			 	$("[name='pm1id']:checkbox:checked").each(function(){				 
-					checked_array.push($(this).val()) 				
+					checked_array.push($(this).val()) 	
+					data=data+','+$(this).val();			
 				});
-				$
-				alert(checked_array)
-				var data=JSON.stringify(checked_array)
+				alert(data)
 				$.ajax({  
 				    url: "{{urlfor "PmController.PmStautsChange"}}",  
 				    data: { pm1id: data},    
 				    type: "POST",   
-				    success: function (responseJSON) {  
-				        // your logic  
+				    success: function () {  
+				        // your logic 
 				        alert('Ok');  
 				    }  
 				});			

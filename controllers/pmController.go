@@ -53,22 +53,43 @@ func (this *PmController) PmSearch() {
 	o := orm.NewOrm()
 	var maps []orm.Params
 	pm := new(models.Pm)
-	num, err := o.QueryTable(pm).Filter("Year", Pmyear).Filter("Faculty", Pmfaculty).Filter("Status", "可用").Values(&maps)
-	if err == nil {
-		fmt.Printf("Result Nums: %d\n", num)
-		this.Data["m"] = maps
-		this.Data["num"] = num
-		for _, m := range maps {
-			fmt.Println(m["Year"], m["Faculty"], m["Status"])
+	if Pmfaculty == "" {
+		num, err := o.QueryTable(pm).Filter("Year", Pmyear).Filter("Status", "可用").Values(&maps)
+		if err == nil {
+			fmt.Printf("Result Nums: %d\n", num)
+			this.Data["m"] = maps
+			this.Data["num"] = num
+			for _, m := range maps {
+				fmt.Println(m["Year"], m["Faculty"], m["Status"])
+			}
 		}
-	}
-	num1, err := o.QueryTable(pm).Filter("Year", Pmyear).Filter("Faculty", Pmfaculty).Filter("Status", "停用").Values(&maps)
-	if err == nil {
-		fmt.Printf("Result Nums: %d\n", num1)
-		this.Data["m1"] = maps
-		this.Data["num1"] = num1
-		for _, m1 := range maps {
-			fmt.Println(m1["Year"], m1["Faculty"], m1["Status"])
+		num1, err := o.QueryTable(pm).Filter("Year", Pmyear).Filter("Status", "停用").Values(&maps)
+		if err == nil {
+			fmt.Printf("Result Nums: %d\n", num1)
+			this.Data["m1"] = maps
+			this.Data["num1"] = num1
+			for _, m1 := range maps {
+				fmt.Println(m1["Year"], m1["Faculty"], m1["Status"])
+			}
+		}
+	} else {
+		num, err := o.QueryTable(pm).Filter("Year", Pmyear).Filter("Faculty", Pmfaculty).Filter("Status", "可用").Values(&maps)
+		if err == nil {
+			fmt.Printf("Result Nums: %d\n", num)
+			this.Data["m"] = maps
+			this.Data["num"] = num
+			for _, m := range maps {
+				fmt.Println(m["Year"], m["Faculty"], m["Status"])
+			}
+		}
+		num1, err := o.QueryTable(pm).Filter("Year", Pmyear).Filter("Faculty", Pmfaculty).Filter("Status", "停用").Values(&maps)
+		if err == nil {
+			fmt.Printf("Result Nums: %d\n", num1)
+			this.Data["m1"] = maps
+			this.Data["num1"] = num1
+			for _, m1 := range maps {
+				fmt.Println(m1["Year"], m1["Faculty"], m1["Status"])
+			}
 		}
 	}
 	this.TplName = "pm.tpl"
@@ -131,7 +152,8 @@ func (this *PmController) PmDelete() {
 //状态改变
 func (this *PmController) PmStautsChange() {
 	fmt.Println("状态改变")
-	pmid := this.Input().Get("pmid")
+	pmid := strings.TrimSpace(this.GetString("pmid"))
 	fmt.Println(pmid)
-
+	//	var req []byte = this.Ctx.Input.RequestBody
+	//	fmt.Println(string(req[:]))
 }

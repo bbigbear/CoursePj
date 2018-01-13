@@ -6,6 +6,7 @@
 		<script type="text/javascript" src="/static/js/bootstrap.min.js"></script>
 	</head>
 	<body>
+		{{template "TopBar"}}
 		<div class="container-fluid" style="padding-top:50px">
       		<div class="row">
         		{{template "LeftBar"}}
@@ -96,7 +97,7 @@
 			function AddInput(){
 				var cid=document.getElementById("pid")
 				if(pid.value.length==0){
-					alert("实践环节不能为空")
+					alert("环节代码不能为空")
 					return false
 				}
 				

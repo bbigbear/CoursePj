@@ -62,17 +62,38 @@ func (this *HomeController) TheoryCourseSearch() {
 	o := orm.NewOrm()
 	var maps []orm.Params
 	theoryCourse := new(models.TheoryCourse)
-	num, err := o.QueryTable(theoryCourse).Filter("Cunit", Cunit).Filter("Cname", Cname).Values(&maps)
-	if err == nil {
-		fmt.Printf("Result Nums: %d\n", num)
-		this.Data["m"] = maps
-		this.Data["num"] = num
-		for _, m := range maps {
-			fmt.Println(m["Cunit"], m["Cid"])
+	if (Cunit != "") && (Cname == "") {
+		num, err := o.QueryTable(theoryCourse).Filter("Cunit", Cunit).Values(&maps)
+		if err == nil {
+			fmt.Printf("Result Nums: %d\n", num)
+			this.Data["m"] = maps
+			this.Data["num"] = num
+			for _, m := range maps {
+				fmt.Println(m["Cunit"], m["Cid"])
+			}
+		}
+	} else if (Cunit == "") && (Cname != "") {
+		num, err := o.QueryTable(theoryCourse).Filter("Cname", Cname).Values(&maps)
+		if err == nil {
+			fmt.Printf("Result Nums: %d\n", num)
+			this.Data["m"] = maps
+			this.Data["num"] = num
+			for _, m := range maps {
+				fmt.Println(m["Cunit"], m["Cid"])
+			}
+		}
+	} else {
+		num, err := o.QueryTable(theoryCourse).Filter("Cunit", Cunit).Filter("Cname", Cname).Values(&maps)
+		if err == nil {
+			fmt.Printf("Result Nums: %d\n", num)
+			this.Data["m"] = maps
+			this.Data["num"] = num
+			for _, m := range maps {
+				fmt.Println(m["Cunit"], m["Cid"])
+			}
 		}
 	}
 	this.TplName = "home.tpl"
-
 }
 
 //编辑

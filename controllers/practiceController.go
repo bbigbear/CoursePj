@@ -60,15 +60,38 @@ func (this *PracticeController) PracticeSearch() {
 	o := orm.NewOrm()
 	var maps []orm.Params
 	practice := new(models.Practice)
-	num, err := o.QueryTable(practice).Filter("Punit", Punit).Filter("Pname", Pname).Values(&maps)
-	if err == nil {
-		fmt.Printf("Result Nums: %d\n", num)
-		this.Data["m"] = maps
-		this.Data["num"] = num
-		for _, m := range maps {
-			fmt.Println(m["Punit"], m["Pid"])
+	if (Punit != "") && (Pname == "") {
+		num, err := o.QueryTable(practice).Filter("Punit", Punit).Filter("Pname", Pname).Values(&maps)
+		if err == nil {
+			fmt.Printf("Result Nums: %d\n", num)
+			this.Data["m"] = maps
+			this.Data["num"] = num
+			for _, m := range maps {
+				fmt.Println(m["Punit"], m["Pid"])
+			}
+		}
+	} else if (Punit == "") && (Pname != "") {
+		num, err := o.QueryTable(practice).Filter("Punit", Punit).Filter("Pname", Pname).Values(&maps)
+		if err == nil {
+			fmt.Printf("Result Nums: %d\n", num)
+			this.Data["m"] = maps
+			this.Data["num"] = num
+			for _, m := range maps {
+				fmt.Println(m["Punit"], m["Pid"])
+			}
+		}
+	} else {
+		num, err := o.QueryTable(practice).Filter("Punit", Punit).Filter("Pname", Pname).Values(&maps)
+		if err == nil {
+			fmt.Printf("Result Nums: %d\n", num)
+			this.Data["m"] = maps
+			this.Data["num"] = num
+			for _, m := range maps {
+				fmt.Println(m["Punit"], m["Pid"])
+			}
 		}
 	}
+
 	this.TplName = "practice.tpl"
 
 }

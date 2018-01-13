@@ -6,6 +6,7 @@
 		<script type="text/javascript" src="/static/js/bootstrap.min.js"></script>
 	</head>
 	<body>
+		{{template "TopBar"}}
 		<div class="container-fluid" style="padding-top:50px">
       		<div class="row">
         		{{template "LeftBar"}}
