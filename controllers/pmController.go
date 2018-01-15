@@ -15,6 +15,33 @@ type PmController struct {
 
 func (this *PmController) Get() {
 
+	o := orm.NewOrm()
+	var maps []orm.Params
+	pm := new(models.Pm)
+	query := o.QueryTable(pm).Filter("Status", "可用")
+	query1 := o.QueryTable(pm).Filter("Status", "停用")
+
+	//可用
+	num, err := query.Values(&maps)
+	if err == nil {
+		fmt.Printf("Result Nums: %d\n", num)
+		this.Data["m"] = maps
+		this.Data["num"] = num
+		for _, m := range maps {
+			fmt.Println(m["Year"], m["Faculty"], m["Status"])
+		}
+	}
+	//停用
+	num1, err := query1.Values(&maps)
+	if err == nil {
+		fmt.Printf("Result Nums: %d\n", num)
+		this.Data["m1"] = maps
+		this.Data["num1"] = num1
+		for _, m1 := range maps {
+			fmt.Println(m1["Year"], m1["Faculty"], m1["Status"])
+		}
+	}
+
 	this.TplName = "pm.tpl"
 }
 
@@ -44,54 +71,53 @@ func (this *PmController) PmAddAction() {
 //检索
 func (this *PmController) PmSearch() {
 	fmt.Println("post查询")
-	//	Cunit := strings.TrimSpace(this.GetString("s_Cunit"))
-	//	Cname := strings.TrimSpace(this.GetString("s_Cname"))
+
+	filters := make([]interface{}, 0)
 	Pmyear := this.Input().Get("s_Pmyear")
+	if Pmyear != "" {
+		filters = append(filters, "Year", Pmyear)
+	}
 	Pmfaculty := this.Input().Get("s_Pmfaculty")
+	if Pmfaculty != "" {
+		filters = append(filters, "Faculty", Pmfaculty)
+	}
+
 	fmt.Println(Pmyear)
-	fmt.Println(Pmfaculty)
+	fmt.Println(len(Pmfaculty))
 	o := orm.NewOrm()
 	var maps []orm.Params
 	pm := new(models.Pm)
-	if Pmfaculty == "" {
-		num, err := o.QueryTable(pm).Filter("Year", Pmyear).Filter("Status", "可用").Values(&maps)
-		if err == nil {
-			fmt.Printf("Result Nums: %d\n", num)
-			this.Data["m"] = maps
-			this.Data["num"] = num
-			for _, m := range maps {
-				fmt.Println(m["Year"], m["Faculty"], m["Status"])
-			}
-		}
-		num1, err := o.QueryTable(pm).Filter("Year", Pmyear).Filter("Status", "停用").Values(&maps)
-		if err == nil {
-			fmt.Printf("Result Nums: %d\n", num1)
-			this.Data["m1"] = maps
-			this.Data["num1"] = num1
-			for _, m1 := range maps {
-				fmt.Println(m1["Year"], m1["Faculty"], m1["Status"])
-			}
-		}
-	} else {
-		num, err := o.QueryTable(pm).Filter("Year", Pmyear).Filter("Faculty", Pmfaculty).Filter("Status", "可用").Values(&maps)
-		if err == nil {
-			fmt.Printf("Result Nums: %d\n", num)
-			this.Data["m"] = maps
-			this.Data["num"] = num
-			for _, m := range maps {
-				fmt.Println(m["Year"], m["Faculty"], m["Status"])
-			}
-		}
-		num1, err := o.QueryTable(pm).Filter("Year", Pmyear).Filter("Faculty", Pmfaculty).Filter("Status", "停用").Values(&maps)
-		if err == nil {
-			fmt.Printf("Result Nums: %d\n", num1)
-			this.Data["m1"] = maps
-			this.Data["num1"] = num1
-			for _, m1 := range maps {
-				fmt.Println(m1["Year"], m1["Faculty"], m1["Status"])
-			}
+	query := o.QueryTable(pm).Filter("Status", "可用")
+	query1 := o.QueryTable(pm).Filter("Status", "停用")
+
+	if len(filters) > 0 {
+		l := len(filters)
+		for k := 0; k < l; k += 2 {
+			query = query.Filter(filters[k].(string), filters[k+1])
+			query1 = query1.Filter(filters[k].(string), filters[k+1])
 		}
 	}
+	//可用
+	num, err := query.Values(&maps)
+	if err == nil {
+		fmt.Printf("Result Nums: %d\n", num)
+		this.Data["m"] = maps
+		this.Data["num"] = num
+		for _, m := range maps {
+			fmt.Println(m["Year"], m["Faculty"], m["Status"])
+		}
+	}
+	//停用
+	num1, err := query1.Values(&maps)
+	if err == nil {
+		fmt.Printf("Result Nums: %d\n", num)
+		this.Data["m1"] = maps
+		this.Data["num1"] = num1
+		for _, m1 := range maps {
+			fmt.Println(m1["Year"], m1["Faculty"], m1["Status"])
+		}
+	}
+
 	this.TplName = "pm.tpl"
 
 }
