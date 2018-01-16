@@ -63,6 +63,18 @@ func (this *PracticeController) PracticeSearch() {
 	if Pname != "" {
 		filters = append(filters, "Pname", Pname)
 	}
+	Pcg1 := this.Input().Get("s_Pcg1")
+	if Pcg1 != "" {
+		filters = append(filters, "Pcg1", Pcg1)
+	}
+	Status := this.Input().Get("s_Status")
+	if Pname != "" {
+		filters = append(filters, "Status", Status)
+	}
+	Year := this.Input().Get("s_Year")
+	if Year != "" {
+		filters = append(filters, "Year", Year)
+	}
 
 	fmt.Println(Punit)
 	fmt.Println(len(Pname))

@@ -64,6 +64,23 @@ func (this *HomeController) TheoryCourseSearch() {
 		filters = append(filters, "Cname", Cname)
 	}
 
+	Ccg1 := this.Input().Get("s_Ccg1")
+	if Ccg1 != "" {
+		filters = append(filters, "Ccg1", Ccg1)
+	}
+	Ccg2 := this.Input().Get("s_Ccg2")
+	if Ccg2 != "" {
+		filters = append(filters, "Ccg2", Ccg2)
+	}
+	Status := this.Input().Get("s_Status")
+	if Status != "" {
+		filters = append(filters, "Status", Status)
+	}
+	Year := this.Input().Get("s_Year")
+	if Year != "" {
+		filters = append(filters, "Year", Year)
+	}
+
 	fmt.Println(Cunit)
 	fmt.Println(len(Cname))
 	o := orm.NewOrm()

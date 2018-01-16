@@ -178,7 +178,7 @@ func (this *PmController) PmDelete() {
 //状态改变
 func (this *PmController) PmStautsChange() {
 	fmt.Println("状态改变")
-	pmid := strings.TrimSpace(this.GetString("pmid"))
+	pmid := this.Input().Get("pm1id")
 	fmt.Println(pmid)
 	//	var req []byte = this.Ctx.Input.RequestBody
 	//	fmt.Println(string(req[:]))

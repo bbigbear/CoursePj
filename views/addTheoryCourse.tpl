@@ -38,11 +38,18 @@
 							<div class="form-group">				
 								<label class="col-sm-2 control-label">课程类别</label>			
 								<div class="col-sm-5">
-								<input class="form-control" name="Ccg1">
-								
+								<select class="form-control" name="Ccg1">
+								<option>计算机</option>
+								<option>音乐</option>
+								<option>外语</option>
+								<option>大学语文</option>
+								</select>
 								</div>
 								<div class="col-sm-5">
-								<input class="form-control" name="Ccg2">								
+								<select class="form-control" name="Ccg2">
+								<option>选修</option>
+								<option>必修</option>
+								</select>							
 								</div>
 								
 							</div>
@@ -55,7 +62,10 @@
 							<div class="form-group">				
 								<label class="col-sm-2 control-label">状态</label>			
 								<div class="col-sm-10">
-								<input class="form-control" name="Status">
+								<select class="form-control" name="Status">
+								<option>可用</option>
+								<option>停用</option>
+								</select>
 								</div>
 							</div>
 							<div class="form-group">				
@@ -103,7 +113,12 @@
 							<div class="form-group">				
 								<label class="col-sm-2 control-label">年级</label>			
 								<div class="col-sm-10">
-								<input class="form-control" name="Year">
+								<select class="form-control" name="Year">
+								<option>2015</option>
+								<option>2016</option>
+								<option>2017</option>
+								<option>2018</option>
+								</select>
 								</div>
 							</div>
 							<div class="form-group">							

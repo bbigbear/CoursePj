@@ -159,13 +159,13 @@
 				var data="";
 			 	$("[name='pm1id']:checkbox:checked").each(function(){				 
 					checked_array.push($(this).val()) 	
-					data=data+','+$(this).val();			
+					data=data+$(this).val()+',';			
 				});
 				alert(data)
 				$.ajax({  
 				    url: "{{urlfor "PmController.PmStautsChange"}}",  
 				    data: { pm1id: data},    
-				    type: "POST",   
+				    type: "POST",
 				    success: function () {  
 				        // your logic 
 				        alert('Ok');  
