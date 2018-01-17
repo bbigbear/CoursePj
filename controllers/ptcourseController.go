@@ -4,6 +4,7 @@ import (
 	"CoursePj/models"
 	"fmt"
 	"regexp"
+	"strconv"
 	"strings"
 
 	_ "github.com/GO-SQL-Driver/MySQL"
@@ -53,9 +54,38 @@ func (this *PTCourseController) Setcourse() {
 	cid := this.Input().Get("cid")
 	pmid := this.Input().Get("pmid")
 	cidlist := strings.Split(cid, ",")
-	reg := regexp.MustCompile(`\["(.*?)"\]`)
+	//	reg := regexp.MustCompile(`^\[.*\]`)
+	reg := regexp.MustCompile(`[[:digit:]]+`)
 	pmidlist := reg.FindAllString(pmid, -1)
 	fmt.Println(pmid)
 	fmt.Println(cidlist)
 	fmt.Println(pmidlist)
+
+	o := orm.NewOrm()
+	var ptcourse models.PTCourse
+	cid_count := len(cidlist) - 1
+	pmid_count := len(pmidlist)
+	for j := 0; j < pmid_count; j++ {
+		for i := 0; i < cid_count; i++ {
+
+			ci, err := strconv.ParseInt(cidlist[i], 10, 64)
+			if err == nil {
+				ptcourse.Cid = ci
+			}
+			pmi, err := strconv.ParseInt(pmidlist[j], 10, 64)
+			if err == nil {
+				ptcourse.Pmid = pmi
+			}
+			id, err := o.Insert(&ptcourse)
+			if err != nil {
+				this.ajaxMsg("", MSG_ERR)
+				fmt.Println("插入失败")
+			}
+			fmt.Println(id)
+		}
+	}
+	fmt.Println("插入成功")
+	this.ajaxMsg("", MSG_OK)
+	return
+
 }

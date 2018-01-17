@@ -29,6 +29,7 @@ func init() {
 	beego.Router("/pm/edit", &controllers.PmController{}, "*:PmEdit")
 	beego.Router("/pm/add", &controllers.PmController{}, "*:PmAdd")
 	beego.Router("/pm/search", &controllers.PmController{}, "*:PmSearch")
+	beego.AutoRouter(&controllers.PmController{})
 
 	//专业理论
 	beego.Router("/ptcourse", &controllers.PTCourseController{})
