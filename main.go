@@ -31,5 +31,5 @@ func RegisterModel() {
 	orm.RegisterModel(new(models.TheoryCourse))
 	orm.RegisterModel(new(models.Practice))
 	orm.RegisterModel(new(models.Pm))
-	orm.RegisterModel(new(models.PTCourse))
+	orm.RegisterModel(new(models.Ptcourse))
 }

@@ -33,6 +33,7 @@ func init() {
 
 	//专业理论
 	beego.Router("/ptcourse", &controllers.PTCourseController{})
+	beego.Router("/ptcourse/edit", &controllers.PTCourseController{}, "*:PTCourseEdit")
 	beego.AutoRouter(&controllers.PTCourseController{})
 
 	//专业实践环节

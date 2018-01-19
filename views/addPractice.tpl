@@ -51,8 +51,8 @@
 								<label class="col-sm-2 control-label">状态</label>			
 								<div class="col-sm-10">
 								<select class="form-control" name="Status">
-								<option>停用</option>
 								<option>可用</option>
+								<option>停用</option>
 								</select>
 								</div>
 							</div>

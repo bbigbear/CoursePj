@@ -42,7 +42,7 @@
 					</div>
 					<div class="col-sm-2" style="padding-top:25px">
 						<button type="button" class="btn btn-primary" onclick="return ToSetCourse()">设置专业课程</button>
-						<button type="button" class="btn btn-primary" onclick="return QueryInput()" style="margin-top:10px">查看已设置课程</button>
+						<button type="button" class="btn btn-primary" onclick="return EditInput()" style="margin-top:10px">查看已设置课程</button>
 					</div>
 					</div>
 					<div class="table-responsive">
@@ -97,10 +97,9 @@
     	</div>
 		<script type="text/javascript">
 			
-			function QueryInput(){				
-				var s_Status=document.getElementById("s_Status")
-				var s_Year=document.getElementById("s_Year")
-				window.location.href="/home/search?s_Year="+s_Year.value+"&s_Status="+s_Status.value
+			function EditInput(){				
+				var pmid=document.getElementById("Pmid")
+				window.location.href="/ptcourse/edit?pmid="+pmid.value
 			}
 			function ToSetCourse(){
 				var checked_array=[];
@@ -115,15 +114,22 @@
 				     selectedValues.push($(this).val());
 					 Pm_data=Pm_data+$(this).val()+',';
 				 });
-				alert(Pm_data)
-				alert(data)
-				
+				//alert(Pm_data)
+				//alert(data)				
 				$.ajax({  
 				    url: "{{urlfor "PTCourseController.Setcourse"}}",  
 				    data: { cid: data,pmid: Pm_data},    
-				    type: "POST",   
-				    success: function () {  
-				        
+				    type: "POST",
+					async:false,
+					error:function(data){
+						alert("post error")
+					},
+				    success:function(data){  
+				        if(data.status==0){
+							alert("设置成功")
+						}else{
+							alert("设置失败，已存在相关理论课程")
+						}
 				    }  
 				});			
 			}		
