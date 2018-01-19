@@ -20,10 +20,10 @@
 					    <div class="col-sm-4">							
 							<form role="form">
 							  <div class="form-group">
-							    <label for="name">{{.pmid}}</label>
-							    <select multiple class="form-control" id="Cid">
-								{{range .m}}	
-							      <option>{{.Cid}}</option>		   
+							    <label for="name" id="Pname">{{.pmid}}</label>
+							    <select multiple class="form-control" id="Cname">
+								{{range .s}}
+							      <option>{{.}}</option>		   
 								{{end}}	
 							    </select>
 							  </div>
@@ -40,43 +40,32 @@
     	</div>
 		<script type="text/javascript">
 			
-			function QueryInput(){				
-				var s_Status=document.getElementById("s_Status")
-				var s_Year=document.getElementById("s_Year")
-				window.location.href="/home/search?s_Year="+s_Year.value+"&s_Status="+s_Status.value
-			}
-			function ToDelCourse(){
-				var checked_array=[];
-				var selectedValues=[];
+			function ToDelCourse(){											
+				//var pname=document.getElementById("Pname")
 				var data="";
-				var Pm_data="";
-			 	$("[name='Cid']:checkbox:checked").each(function(){				 
-					checked_array.push($(this).val()) 	
-					data=data+$(this).val()+',';			
-				});
-				$("#Pmid :selected").each(function(){
-				     selectedValues.push($(this).val());
-					 Pm_data=Pm_data+$(this).val()+',';
+				$("#Cname :selected").each(function(){				 
+					 data=data+$(this).val()+',';
 				 });
-				//alert(Pm_data)
-				//alert(data)				
-				$.ajax({  
-				    url: "{{urlfor "PTCourseController.Setcourse"}}",  
-				    data: { cid: data,pmid: Pm_data},    
-				    type: "POST",
+				//alert(data)
+				$.ajax({
+					type:"POST",
+					url:"{{urlfor "PTCourseController.PTCourseDelete"}}",
+					data:{cname:data,pmid:{{.pmid}}},
 					async:false,
-					error:function(data){
-						alert("post error")
+					error:function(request){
+						alert("post error")		
 					},
-				    success:function(data){  
-				        if(data.status==0){
-							alert("设置成功")
+					success:function(data){
+						if(data.status==0){
+							alert("删除成功")
+							window.location.href="/ptcourse/edit?pmid="+{{.pmid}}
 						}else{
-							alert("设置失败，已存在相关理论课程")
-						}
-				    }  
-				});			
-			}		
+							alert("删除失败")
+						}						
+					}					
+				});
+				return true	
+			}				
 		</script>
 	</body>
 		

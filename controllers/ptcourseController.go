@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"CoursePj/models"
-	"container/list"
 	"fmt"
 	"regexp"
 	"strconv"
@@ -119,26 +118,63 @@ func (this *PTCourseController) PTCourseEdit() {
 	ptc := new(models.Ptcourse)
 	tc := new(models.TheoryCourse)
 	var tc_info models.TheoryCourse
-	l := list.New()
+
 	num, err := o.QueryTable(ptc).Filter("Pmid", pmidlist[0]).Values(&maps)
 	if err == nil {
 		fmt.Printf("Result Nums: %d\n", num)
+		//		slice := make([]string, num)
+		var slice []string
 		for _, m := range maps {
 			fmt.Println("map_cid:", m["Cid"])
 			err := o.QueryTable(tc).Filter("Cid", m["Cid"]).One(&tc_info)
 			if err == nil {
 				fmt.Println("tc_info:", tc_info.Cname)
-				l.PushBack(tc_info.Cname)
+				slice = append(slice, tc_info.Cname)
 			}
 
 		}
-		fmt.Println("l:", l)
+		fmt.Println("slice:", slice)
+		fmt.Println("len slice:", len(slice))
 		this.Data["m"] = maps
 		this.Data["pmid"] = pmid
-		for _, m := range maps {
-			fmt.Println(m["Pmid"])
-		}
+		this.Data["s"] = slice
 	}
 	this.TplName = "editPtcourse.tpl"
 	return
+}
+
+//删除课程
+func (this *PTCourseController) PTCourseDelete() {
+	fmt.Println("删除")
+	cname := this.Input().Get("cname")
+	cnamelist := strings.Split(cname, ",")
+	cname_count := len(cnamelist) - 1
+	fmt.Println("cname del:", cname, cnamelist)
+
+	pmid := this.Input().Get("pmid")
+	fmt.Println("pmid:", pmid)
+
+	//取其中的pmid
+	reg := regexp.MustCompile(`[[:digit:]]+`)
+	pmidlist := reg.FindAllString(pmid, -1)
+
+	o := orm.NewOrm()
+	tc := new(models.TheoryCourse)
+	ptc := new(models.Ptcourse)
+	var tc_info models.TheoryCourse
+
+	for i := 0; i < cname_count; i++ {
+		err := o.QueryTable(tc).Filter("Cname", cnamelist[i]).One(&tc_info)
+		if err == nil {
+			num, err := o.QueryTable(ptc).Filter("Cid", tc_info.Cid).Filter("Pmid", pmidlist[0]).Delete()
+			if err == nil {
+				fmt.Printf("删除成功")
+				fmt.Printf("Result delCid Nums: %d\n", num)
+			}
+		}
+	}
+
+	this.ajaxMsg("", MSG_OK)
+	return
+
 }

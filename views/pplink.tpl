@@ -13,10 +13,10 @@
 				<div class="col-sm-10">
 					<div class="panel panel-primary">
 						<div class="panel-heading">
-							<h4 class="panel-title">查询专业理论课程</h4>
+							<h4 class="panel-title">设置专业理论课程</h4>
 						</div>
 					    <div class="panel-body">
-						<form class="form-inline" role="form" id="searchCourse">					        
+						<!--<form class="form-inline" role="form" id="searchCourse">					        
 							<div class="form-group">						
 								<label>所属的年级</label>
 								<input class="form-control" name="s_Year" id="s_Year">
@@ -24,27 +24,30 @@
 							  	<input class="form-control" name="s_Faculty" id="s_Faculty">			
 								<button type="button" class="btn btn-primary" onclick="return QueryInput()">检索</button>
 							</div>
-						</form>
+						</form>-->
+						
+						<div class="row">				
+					    <div class="col-sm-4">							
+							<form role="form">
+							  <div class="form-group">
+							    <label for="name">专业列表</label>
+							    <select multiple class="form-control">
+								{{range .m1}}	
+							      <option>{{.Pmname}}[{{.Pmid}}]</option>							   
+								{{end}}	
+							    </select>
+							  </div>
+							</form>																			
+						</div>
+						<div class="col-sm-2" style="padding-top:25px">
+							<button type="button" class="btn btn-primary" onclick="return QueryInput()">设置实践环节</button>
+							<button type="button" class="btn btn-primary" onclick="return QueryInput()" style="margin-top:10px">查看已设置环节</button>
+						</div>
+						</div>
+						
 						</div>
 					</div>
-					<div class="row">				
-				    <div class="col-sm-4">							
-						<form role="form">
-						  <div class="form-group">
-						    <label for="name">专业列表</label>
-						    <select multiple class="form-control">
-							{{range .m1}}	
-						      <option>{{.Pmname}}[{{.Pmid}}]</option>							   
-							{{end}}	
-						    </select>
-						  </div>
-						</form>																			
-					</div>
-					<div class="col-sm-2" style="padding-top:25px">
-						<button type="button" class="btn btn-primary" onclick="return QueryInput()">设置实践环节</button>
-						<button type="button" class="btn btn-primary" onclick="return QueryInput()" style="margin-top:10px">查看已设置环节</button>
-					</div>
-					</div>
+					
 					<div class="table-responsive">
 						<table class="table table-bordered">
 							<caption><h4 class="panel-title">实践环节信息</h4></caption>
