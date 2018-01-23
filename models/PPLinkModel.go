@@ -1,6 +1,7 @@
 package models
 
 type Pplink struct {
-	Pid  int64 `orm:"PK"`
+	Id   int64
+	Pid  int64
 	Pmid int64
 }

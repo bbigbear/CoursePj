@@ -71,7 +71,7 @@
 								</tr>
 								{{range .m}}
 								<tr>
-									<th><input type="checkbox" value="{{.Cid}}" name="Cid"></th>
+									<th><input type="checkbox" value="{{.Cid}}" name="Cid" id="Cid"></th>
 									<th>{{.Cid}}</th>
 									<th>{{.Cunit}}</th>
 									<th>{{.Cname}}</th>
@@ -101,39 +101,56 @@
 			
 			function EditInput(){				
 				var pmid=document.getElementById("Pmid")
-				window.location.href="/ptcourse/edit?pmid="+pmid.value
+				//alert($("#Pmid").is(":checked"))
+				//alert($("#Pmid").val())
+				if ($("#Pmid").val()!=null){
+					window.location.href="/ptcourse/edit?pmid="+pmid.value
+				}else{
+					alert("请选择专业再查看")
+				}				
 			}
 			function ToSetCourse(){
+				//alert($('#Cid').is(':checked'))
+				//alert($("#Pmid").val())
 				var checked_array=[];
 				var selectedValues=[];
 				var data="";
 				var Pm_data="";
-			 	$("[name='Cid']:checkbox:checked").each(function(){				 
+					$("[name='Cid']:checkbox:checked").each(function(){				 
 					checked_array.push($(this).val()) 	
 					data=data+$(this).val()+',';			
-				});
-				$("#Pmid :selected").each(function(){
+					});
+				
+					$("#Pmid :selected").each(function(){
 				     selectedValues.push($(this).val());
 					 Pm_data=Pm_data+$(this).val()+',';
-				 });
+				 	});
+				
+				
 				//alert(Pm_data)
-				//alert(data)				
-				$.ajax({  
-				    url: "{{urlfor "PTCourseController.Setcourse"}}",  
-				    data: { cid: data,pmid: Pm_data},    
-				    type: "POST",
-					async:false,
-					error:function(data){
-						alert("post error")
-					},
-				    success:function(data){  
-				        if(data.status==0){
-							alert("设置成功")
-						}else{
-							alert("设置失败，已存在相关理论课程")
-						}
-				    }  
-				});			
+				//alert(data)
+				//alert($("[name='Cid']:checked").length)
+				if($("[name='Cid']:checked").length>0&&$("#Pmid").val()!=null){
+					$.ajax({  
+					    url: "{{urlfor "PTCourseController.Setcourse"}}",  
+					    data: { cid: data,pmid: Pm_data},    
+					    type: "POST",
+						async:false,
+						error:function(data){
+							alert("post error")
+						},
+					    success:function(data){  
+					        if(data.status==0){
+								alert("设置成功")
+							}else{
+								alert("设置失败，已存在相关理论课程")
+							}
+					    }  
+					});
+				}else{
+					alert("不能为空")
+				}			
+							
 			}		
 		</script>
 	</body>

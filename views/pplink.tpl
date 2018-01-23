@@ -13,7 +13,7 @@
 				<div class="col-sm-10">
 					<div class="panel panel-primary">
 						<div class="panel-heading">
-							<h4 class="panel-title">设置专业理论课程</h4>
+							<h4 class="panel-title">设置专业实践环节</h4>
 						</div>
 					    <div class="panel-body">
 						<!--<form class="form-inline" role="form" id="searchCourse">					        
@@ -31,7 +31,7 @@
 							<form role="form">
 							  <div class="form-group">
 							    <label for="name">专业列表</label>
-							    <select multiple class="form-control">
+							    <select multiple class="form-control" id="Pmid">
 								{{range .m1}}	
 							      <option>{{.Pmname}}[{{.Pmid}}]</option>							   
 								{{end}}	
@@ -40,8 +40,8 @@
 							</form>																			
 						</div>
 						<div class="col-sm-2" style="padding-top:25px">
-							<button type="button" class="btn btn-primary" onclick="return QueryInput()">设置实践环节</button>
-							<button type="button" class="btn btn-primary" onclick="return QueryInput()" style="margin-top:10px">查看已设置环节</button>
+							<button type="button" class="btn btn-primary" onclick="return ToSetCourse()">设置实践环节</button>
+							<button type="button" class="btn btn-primary" onclick="return EditInput()" style="margin-top:10px">查看已设置环节</button>
 						</div>
 						</div>
 						
@@ -68,7 +68,7 @@
 								</tr>
 								{{range .m}}
 								<tr>
-									<th><input type="checkbox" value="{{.Pid}}" name="Pid"></th>
+									<th><input type="checkbox" value="{{.Pid}}" name="Pid" id="Pid"></th>
 									<th>{{.Pid}}</th>
 									<th>{{.Punit}}</th>
 									<th>{{.Pname}}</th>
@@ -92,10 +92,50 @@
     	</div>
 		<script type="text/javascript">
 			
-			function QueryInput(){				
-				var s_Status=document.getElementById("s_Status")
-				var s_Year=document.getElementById("s_Year")
-				window.location.href="/home/search?s_Year="+s_Year.value+"&s_Status="+s_Status.value
+			function EditInput(){				
+				var pmid=document.getElementById("Pmid")
+				if ($("#Pmid").val()!=null){
+					window.location.href="/pplink/edit?pmid="+pmid.value
+				}else{
+					alert("请选择专业再查看")
+				}
+			}
+			function ToSetCourse(){
+				var checked_array=[];
+				var selectedValues=[];
+				var data="";
+				var Pm_data="";
+			 	$("[name='Pid']:checkbox:checked").each(function(){				 
+					checked_array.push($(this).val()) 	
+					data=data+$(this).val()+',';			
+				});
+				$("#Pmid :selected").each(function(){
+				     selectedValues.push($(this).val());
+					 Pm_data=Pm_data+$(this).val()+',';
+				 });
+				//alert(Pm_data)
+				//alert(data)
+				if($("[name='Pid']:checked").length>0&&$("#Pmid").val()!=null){
+					$.ajax({  
+					    url: "{{urlfor "PPLinkController.Setcourse"}}",  
+					    data: { pid: data,pmid: Pm_data},    
+					    type: "POST",
+						async:false,
+						error:function(data){
+							alert("post error")
+						},
+					    success:function(data){  
+					        if(data.status==0){
+								alert("设置成功")
+							}else{
+								alert("设置失败，已存在相关实践环节")
+							}
+					    }  
+					});
+				}else{
+					alert("不能为空")
+				}			
+							
 			}		
 		</script>
 	</body>

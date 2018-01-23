@@ -38,5 +38,12 @@ func init() {
 
 	//专业实践环节
 	beego.Router("/pplink", &controllers.PPLinkController{})
+	beego.Router("/pplink/edit", &controllers.PPLinkController{}, "*:PPLinkEdit")
 	beego.AutoRouter(&controllers.PPLinkController{})
+
+	//专业学分
+	beego.Router("/pgcredit", &controllers.PGCreditController{})
+	beego.Router("/pgcredit/add", &controllers.PGCreditController{}, "*:PgcAdd")
+	beego.Router("/pgcredit/edit", &controllers.PGCreditController{}, "*:PgcEdit")
+	beego.AutoRouter(&controllers.PGCreditController{})
 }

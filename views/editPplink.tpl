@@ -13,15 +13,15 @@
 				<div class="col-sm-10">
 					<div class="panel panel-primary">
 						<div class="panel-heading">
-							<h4 class="panel-title">查看专业理论课程</h4>
+							<h4 class="panel-title">查看专业实践环节</h4>
 						</div>
 					    <div class="panel-body">
 						<div class="row">				
 					    <div class="col-sm-4">							
 							<form role="form">
 							  <div class="form-group">
-							    <label for="name" id="Pname">{{.pmid}}</label>
-							    <select multiple class="form-control" id="Cname">
+							    <label for="name">{{.pmid}}</label>
+							    <select multiple class="form-control" id="Pname">
 								{{range .s}}
 							      <option>{{.}}</option>		   
 								{{end}}	
@@ -30,7 +30,7 @@
 							</form>														
 						</div>
 						<div class="col-sm-2" style="padding-top:25px">
-							<button type="button" class="btn btn-primary" onclick="return ToDelCourse()">删除选中课程</button>
+							<button type="button" class="btn btn-primary" onclick="return ToDelCourse()">删除选中环节</button>
 						</div>
 						</div>
 						</div>
@@ -43,15 +43,15 @@
 			function ToDelCourse(){											
 				//var pname=document.getElementById("Pname")
 				var data="";
-				$("#Cname :selected").each(function(){				 
+				$("#Pname :selected").each(function(){				 
 					 data=data+$(this).val()+',';
 				 });
-				//alert($("#Cname").val())
-				if($("#Cname").val()!=null){
+				//alert(data)
+				if($("#Pname").val()!=null){
 					$.ajax({
 						type:"POST",
-						url:"{{urlfor "PTCourseController.PTCourseDelete"}}",
-						data:{cname:data,pmid:{{.pmid}}},
+						url:"{{urlfor "PPLinkController.PPLinkDelete"}}",
+						data:{pname:data,pmid:{{.pmid}}},
 						async:false,
 						error:function(request){
 							alert("post error")		
@@ -59,7 +59,7 @@
 						success:function(data){
 							if(data.status==0){
 								alert("删除成功")
-								window.location.href="/ptcourse/edit?pmid="+{{.pmid}}
+								window.location.href="/pplink/edit?pmid="+{{.pmid}}
 							}else{
 								alert("删除失败")
 							}						
@@ -67,8 +67,7 @@
 					});
 				}else{
 					alert("请选择再删除")
-				}
-				
+				}	
 				return true	
 			}				
 		</script>
