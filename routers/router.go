@@ -46,4 +46,8 @@ func init() {
 	beego.Router("/pgcredit/add", &controllers.PGCreditController{}, "*:PgcAdd")
 	beego.Router("/pgcredit/edit", &controllers.PGCreditController{}, "*:PgcEdit")
 	beego.AutoRouter(&controllers.PGCreditController{})
+
+	//复制计划
+	beego.Router("/copyplan/profession", &controllers.CopyPlanController{}, "*:GetProfessionPlan")
+	beego.Router("/copyplan/year", &controllers.CopyPlanController{}, "*:GetYearPlan")
 }

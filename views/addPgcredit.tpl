@@ -16,7 +16,7 @@
 							<h3 class="panel-title">设置专业毕业学分</h3>
 						</div>
 					    <div class="panel-body">
-							<label for="name">专业：</label>
+							<label for="name">专业：{{.pmname}}</label>
 							<table border="1" cellpadding="1" cellspacing="1" class="table-bordered table-condensed" style="width: 700px; height: 180px;">
 								<tbody>
 									<tr>
@@ -65,7 +65,7 @@
 		<script type="text/javascript">
 			function SumInput(){
 				//alert("点击计算")
-				var llxiaoji=parseFloat($("#ggbx").val())+parseFloat($("#zybx").val())+parseFloat($("#zyxx").val())+parseFloat($("#zyrx").val())
+				var llxiaoji=parseFloat($("#ggbx").val())+parseFloat($("#ggrx").val())+parseFloat($("#zybx").val())+parseFloat($("#zyxx").val())+parseFloat($("#zyrx").val())
 				var sjxiaoji=parseFloat($("#sjxf").val())
 				var zxf=llxiaoji+sjxiaoji
 				
@@ -74,7 +74,39 @@
 				$("#zxf").val(zxf)
 			}
 			function SaveInput(){
-				alert("记得保存")
+				//alert("点击保存")
+				var llxiaoji=parseFloat($("#ggbx").val())+parseFloat($("#ggrx").val())+parseFloat($("#zybx").val())+parseFloat($("#zyxx").val())+parseFloat($("#zyrx").val())
+				var sjxiaoji=parseFloat($("#sjxf").val())
+				var zxf=llxiaoji+sjxiaoji
+				$.ajax({
+					type:"POST",
+					url:"{{urlfor "PGCreditController.PgcSave"}}",
+					data:{
+						pmname:{{.pmname}},
+						ggbx:parseFloat($("#ggbx").val()),
+						ggrx:parseFloat($("#ggrx").val()),
+						zybx:parseFloat($("#zybx").val()),
+						zyxx:parseFloat($("#zyxx").val()),
+						zyrx:parseFloat($("#zyrx").val()),
+						sjxf:parseFloat($("#sjxf").val()),
+						zxf:zxf			
+					},
+					async:false,
+					error:function(request){
+						alert("post error")
+						
+					},
+					success:function(data){
+						if(data.status==0){
+							alert("保存成功")
+							window.location.href="/pgcredit"
+						}else{
+							alert("保存失败")
+						}
+						
+					}
+					
+				});
 			}
 			function AddInput(){
 				var cid=document.getElementById("pmid")

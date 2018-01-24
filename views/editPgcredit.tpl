@@ -16,7 +16,8 @@
 							<h3 class="panel-title">查看专业毕业学分</h3>
 						</div>
 					    <div class="panel-body">
-							<label for="name">专业：</label>
+							<label for="name">专业：{{.pmname}}</label>
+							{{range .pgc_info}}
 							<table border="1" cellpadding="1" cellspacing="1" class="table-bordered table-condensed" style="width: 700px; height: 180px;">
 								<tbody>
 									<tr>
@@ -34,57 +35,65 @@
 										<td>任选</td>
 										<td>&nbsp;</td>
 										<td>&nbsp;</td>
-									</tr>
+									</tr>									
 									<tr>
-										<td><input type="text" class="form-control"></td>
-										<td><input type="text" class="form-control"></td>
-										<td><input type="text" class="form-control"></td>
-										<td><input type="text" class="form-control"></td>
-										<td><input type="text" class="form-control"></td>
-										<td><input type="text" class="form-control"></td>
-										<td><input type="text" class="form-control"></td>
+										<td><input id="ggbx" type="text" class="form-control" value="{{.Open_require_credit}}"></td>
+										<td><input id="ggrx" type="text" class="form-control" value="{{.Open_option_credit}}"></td>
+										<td><input id="zybx" type="text" class="form-control" value="{{.Professional_require_credit}}"></td>
+										<td><input id="zyxx" type="text" class="form-control" value="{{.Professional_option_credit}}"></td>
+										<td><input id="zyrx" type="text" class="form-control" value="{{.Professional_limit_credit}}"></td>
+										<td><input id="llxj" type="text" class="form-control"></td>
+										<td><input id="zxf" type="text" class="form-control" value="{{.Total_credit}}"></td>
 									</tr>
 									<tr>
 										<td>实际环节</td>
-										<td colspan="5" rowspan="1"><input type="text" class="form-control"></td>
-										<td><input type="text" class="form-control"></td>
-										<td><input type="text" class="form-control"></td>
+										<td colspan="5" rowspan="1"><input id="sjxf" type="text" class="form-control" value="{{.Practice_credit}}"></td>
+										<td><input id="sjxj" type="text" class="form-control"></td>
+										<td></td>
 									</tr>
+									
 								</tbody>
 							</table>
-							<div class="col-sm-2 pull-right">
-								<button type="button" class="btn btn-primary" onclick="return EditInput()">修改</button>
-								<button type="button" class="btn btn-primary" onclick="return EditInput()">删除</button>
+							<div class="col-sm-3 pull-right">
+								<button type="button" class="btn btn-primary" onclick="return SumInput()">重新计算</button>
+								<button type="button" class="btn btn-primary" onclick="return UpdateInput()">更新</button>
+								<button type="button" class="btn btn-primary" onclick="return DelInput()">删除</button>
 							</div>
 						</div>
-						
+					{{end}}	
 					</div>
 				</div>
 			</div>			
 		</div>
 		<script type="text/javascript">
-			function AddInput(){
-				var cid=document.getElementById("pmid")
-				if(pmid.value.length==0){
-					alert("专业代码不能为空")
-					return false
-				}
-				
+			function  UpdateInput(){
+				//alert("点击更新按钮")	
+				var llxiaoji=parseFloat($("#ggbx").val())+parseFloat($("#ggrx").val())+parseFloat($("#zybx").val())+parseFloat($("#zyxx").val())+parseFloat($("#zyrx").val())
+				var sjxiaoji=parseFloat($("#sjxf").val())
+				var zxf=llxiaoji+sjxiaoji		
 				$.ajax({
 					type:"POST",
-					url:"{{urlfor "PmController.PmAddAction"}}",
-					data:$("#addPm").serialize(),
+					url:"{{urlfor "PGCreditController.PgcUpdate"}}",
+					data:{
+						pmname:{{.pmname}},
+						ggbx:parseFloat($("#ggbx").val()),
+						ggrx:parseFloat($("#ggrx").val()),
+						zybx:parseFloat($("#zybx").val()),
+						zyxx:parseFloat($("#zyxx").val()),
+						zyrx:parseFloat($("#zyrx").val()),
+						sjxf:parseFloat($("#sjxf").val()),
+						zxf:zxf			
+					},
 					async:false,
 					error:function(request){
-						alert("post error")
-						
+						alert("post error")						
 					},
 					success:function(data){
 						if(data.status==0){
-							alert("新增成功")
-							window.location.href="/pm/add"
+							alert("更新成功")
+							window.location.href="/pgcredit/edit?pmname="+{{.pmname}}
 						}else{
-							alert("新增失败")
+							alert("更新失败")
 						}
 						
 					}
@@ -92,8 +101,39 @@
 				});
 				
 				return true	
-			}	
+			}
+
+		function SumInput(){
+			//alert("点击重新计算")
+			var llxiaoji=parseFloat($("#ggbx").val())+parseFloat($("#ggrx").val())+parseFloat($("#zybx").val())+parseFloat($("#zyxx").val())+parseFloat($("#zyrx").val())
+				var sjxiaoji=parseFloat($("#sjxf").val())
+				var zxf=llxiaoji+sjxiaoji				
+				$("#llxj").val(llxiaoji)
+				$("#sjxj").val(sjxiaoji)
+				$("#zxf").val(zxf)
+		}
+		function DelInput(){
+			//alert("点击删除")
+				$.ajax({
+					type:"POST",
+					url:"{{urlfor "PGCreditController.PgcDel"}}",
+					data:{pmname:{{.pmname}}},
+					async:false,
+					error:function(request){
+						alert("post error")				
+					},
+					success:function(data){
+						if(data.status==0){
+							alert("删除成功")
+							window.location.href="/pgcredit"
+						}else{
+							alert("删除失败")
+						}						
+					}
+					
+				});
+				return true	
+		}	
 		</script>
-	</body>
-		
+	</body>		
 </html>
