@@ -13,26 +13,27 @@
 				<div class="col-sm-10">
 					<div class="panel panel-primary">
 						<div class="panel-heading">
-							<h4 class="panel-title">查询专业信息</h4>
+							<h4 class="panel-title">复制专业培养计划</h4>
 						</div>
 					    <div class="panel-body">
 						<form class="form-inline" role="form" id="searchPm">
 					        <div class="form-group">				
 								<label>年级</label>			
-								<select class="form-control" name="s_Pmyear" id="s_Pmyear">
+								<select class="form-control" name="year" id="year">
 								<option>2015</option>
 								<option>2016</option>
 								<option>2017</option>
 								<option>2018</option>
-								</select>
-								<label>院系</label>			
-								<input class="form-control" name="s_Pmfaculty" id="s_Pmfaculty">
+								</select>							
+								<label>院系</label>
+								<select class="form-control" name="faculty" id="faculty">
+								{{range .m}}
+								<option>{{.}}</option>
+								{{end}}				
+								</select>			
 								<button type="button" class="btn btn-default" onclick="return QueryInput()">检索</button>				
 							</div>
-						</form>
-						<div class="col-sm-1 pull-right">					
-							<button type="button" class="btn btn-primary" onclick="return AddInput()">复制</button>																	 	
-					    </div>						
+						</form>						
 						</div>																	
 					</div>					
 				</div>				
@@ -43,14 +44,18 @@
 					    <div class="col-sm-8">							
 							<form role="form">
 							  <div class="form-group">
-							    <label for="name">未设置专业学分列表：{{.Pmslice_NotSet_count}}个</label>
-							    <select multiple class="form-control" id="Pmslice_NotSet">
-								{{range .Pmslice_NotSet}}	
+								<label for="name" id="f">院/系：{{.f}}</label><br>
+							    <label for="name">已设置培养方案的专业列表：{{.len}}个</label>
+							    <select multiple class="form-control" id="plan_list">
+								{{range .s}}	
 							      <option>{{.}}</option>							   
 								{{end}}	
 							    </select>
 							  </div>
 							</form>																			
+						</div>
+						<div class="col-sm-2" style="padding-top:50px">
+							<button type="button" class="btn btn-primary" onclick="return CopyInput()">复制</button>
 						</div>
 						</div>						
 						</div>
@@ -63,14 +68,17 @@
 						    <div class="col-sm-8">							
 								<form role="form">
 								  <div class="form-group">
-								    <label for="name">已设置专业学分列表：{{.Pmslice_Set_count}}个</label>
-								    <select multiple class="form-control" id="Pmslice_Set">
-									{{range .Pmslice_Set}}	
+								    <label for="name">已制定开课专业列表：{{.slice_plan_len}}个</label>
+								    <select multiple class="form-control" id="open_class_list">
+									{{range .slice_plan}}	
 								      <option>{{.}}</option>							   
 									{{end}}	
 								    </select>
 								  </div>
 								</form>																		
+							</div>
+							<div class="col-sm-2" style="padding-top:25px">
+								<button type="button" class="btn btn-primary" onclick="return RemoveInput()">移除</button>
 							</div>
 						</div>						
 					</div>
@@ -81,46 +89,93 @@
 		<script type="text/javascript">
 			
 			function QueryInput(){
-				var s_Pmyear=document.getElementById("s_Pmyear")
-				var s_Pmfaculty=document.getElementById("s_Pmfaculty")
-				window.location.href="/pm/search?s_Pmyear="+s_Pmyear.value+"&s_Pmfaculty="+s_Pmfaculty.value
-			}
-			function AddInput(){
-				window.location.href="/pm/add"
-			}
-			
-			var isCheckAll=false;
-			function swapCheck(){
-				if(isCheckAll){
-					$("input[name='pm1id']").each(function(){
-						this.checked=false
-					});
-					isCheckAll=false;
+				var year=document.getElementById("year")
+				var faculty=document.getElementById("faculty")
+				if (faculty.value==""){
+					alert("请输入学院")
 				}else{
-					$("input[name='pm1id']").each(function(){
-						this.checked=true
+					window.location.href="/copyplan/profession/search?year="+year.value+"&faculty="+faculty.value
+				}
+				// $.ajax({
+				// 		type:"POST",
+				// 		url:"/copyplan/profession/search",
+				// 		data:{year:year.value,faculty:faculty.value},
+				// 		async:false,
+				// 		error:function(request){
+				// 			alert("post error")		
+				// 		},
+				// 		success:function(data){
+				// 			alert(data.status)
+				// 			if(data.status==0){
+				// 				//alert("删除成功")						
+				// 			}else{
+				// 				alert("查询失败")
+				// 			}						
+				// 		}					
+				// 	});
+			}
+			function CopyInput(){
+				//alert("点击复制按钮")
+				//alert($("#plan_list").val())
+				var year=document.getElementById("year")
+				//var faculty=document.getElementById("f")
+				var pmname=document.getElementById("plan_list")
+				//alert(pmname.value)
+				if($("#plan_list").val()!=null){
+					$.ajax({  
+					    url: "{{urlfor "CopyPlanController.PPCopy"}}",  
+					    data: { 
+							pmname: pmname.value,
+							year: year.value,
+							faculty: {{.f}}
+						},    
+					    type: "POST",
+						async:false,
+						error:function(data){
+							alert("post error")
+						},
+					    success:function(data){  
+					        if(data.status==0){
+								alert("复制成功")
+								window.location.href="/copyplan/profession/search?year="+year.value+"&faculty="+{{.f}}
+							}else{
+								alert("复制失败，已存在专业")
+							}
+					    }  
 					});
-					isCheckAll=true;
+				}else{
+					alert("请选择专业再点击复制")
+				}
+				
+			}
+			function RemoveInput(){
+				//alert("点击移除按钮")
+				var pmname=document.getElementById("open_class_list")
+				if($("#open_class_list").val()!=null){
+					$.ajax({  
+					    url: "{{urlfor "CopyPlanController.PPRemove"}}",  
+					    data: { 
+							pmname: pmname.value,
+						},    
+					    type: "POST",
+						async:false,
+						error:function(data){
+							alert("post error")
+						},
+					    success:function(data){  
+					        if(data.status==0){
+								alert("移除成功")
+								window.location.href="/copyplan/profession/search?year="+year.value+"&faculty="+{{.f}}
+							}else{
+								alert("移除失败")
+							}
+					    }  
+					});
+				}else{
+					alert("请选择专业再点击移除")
 				}
 			}
-			function ToAble(){
-				var checked_array=[];
-				var data="";
-			 	$("[name='pm1id']:checkbox:checked").each(function(){				 
-					checked_array.push($(this).val()) 	
-					data=data+$(this).val()+',';			
-				});
-				alert(data)
-				$.ajax({  
-				    url: "{{urlfor "PmController.PmStautsChange"}}",  
-				    data: { pm1id: data},    
-				    type: "POST",
-				    success: function () {  
-				        // your logic 
-				        alert('Ok');  
-				    }  
-				});			
-			}
+			
 		</script>
 	</body>
 		

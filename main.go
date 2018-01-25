@@ -34,4 +34,5 @@ func RegisterModel() {
 	orm.RegisterModel(new(models.Ptcourse))
 	orm.RegisterModel(new(models.Pplink))
 	orm.RegisterModel(new(models.Pgcredits))
+	orm.RegisterModel(new(models.Plan))
 }

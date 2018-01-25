@@ -50,4 +50,7 @@ func init() {
 	//复制计划
 	beego.Router("/copyplan/profession", &controllers.CopyPlanController{}, "*:GetProfessionPlan")
 	beego.Router("/copyplan/year", &controllers.CopyPlanController{}, "*:GetYearPlan")
+	beego.Router("/copyplan/profession/search", &controllers.CopyPlanController{}, "*:PPSearch")
+	beego.Router("/copyplan/year/search", &controllers.CopyPlanController{}, "*:GYSearch")
+	beego.AutoRouter(&controllers.CopyPlanController{})
 }
