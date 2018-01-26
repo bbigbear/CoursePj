@@ -69,6 +69,7 @@ func (this *PGCreditController) Get() {
 	//合并
 	//	slice_merge = append(Pmslice, Pmslice_Set...)
 	//	fmt.Println("slice_merge:", slice_merge)
+
 	Pmslice_NotSet = RemoveRepByLoop(Pmslice, Pmslice_Set)
 
 	fmt.Println("Pmslice_NotSet:", Pmslice_NotSet)
@@ -260,6 +261,9 @@ func (this *PGCreditController) PgcEdit() {
 // 通过两重循环挑选不同元素
 func RemoveRepByLoop(slc []string, slc1 []string) []string {
 	result := []string{} // 存放结果
+	if len(slc1) == 0 {
+		result = append(result, slc...)
+	}
 	for i := range slc {
 		for j := range slc1 {
 			if slc[i] == slc1[j] {

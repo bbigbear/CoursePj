@@ -1,7 +1,8 @@
 package models
 
 type TheoryCourse struct {
-	Cid         int64 `orm:"PK"`
+	Id          int64
+	Cid         int64
 	Cunit       string
 	Cname       string `orm:"index"`
 	Ccg1        string `orm:"index"`

@@ -58,7 +58,7 @@
 								</tr>
 								{{range .m}}
 								<tr>
-									<th><a href="/practice/edit?pid={{.Pid}}">编辑</a></th>
+									<th><a href="/practice/edit?pid={{.Pid}}&year={{.Year}}">编辑</a></th>
 									<th>{{.Pid}}</th>
 									<th>{{.Punit}}</th>
 									<th>{{.Pname}}</th>

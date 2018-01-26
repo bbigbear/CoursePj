@@ -36,16 +36,29 @@ func (this *PracticeController) PracticeAdd() {
 //新建
 func (this *PracticeController) PracticeAddAction() {
 	fmt.Println("post新建")
+	p := new(models.Practice)
 	practice := models.Practice{}
 
 	if err := this.ParseForm(&practice); err != nil {
 		fmt.Println("获取表单数据失败")
 	}
 	fmt.Println("获取表单数据成功")
-	if _, err := orm.NewOrm().Insert(&practice); err != nil {
-		fmt.Println("插入失败")
+	o := orm.NewOrm()
+	pid := practice.Pid
+	year := practice.Year
+	fmt.Println("获取pid_info", year, pid)
+
+	exist := o.QueryTable(p).Filter("Pid", pid).Filter("Year", year).Exist()
+	if exist {
+		fmt.Println("插入失败,存在相同项")
 		this.ajaxMsg("", MSG_ERR)
+	} else {
+		if _, err := o.Insert(&practice); err != nil {
+			fmt.Println("插入失败")
+			this.ajaxMsg("", MSG_ERR)
+		}
 	}
+
 	this.ajaxMsg("", MSG_OK)
 	return
 }
@@ -108,10 +121,12 @@ func (this *PracticeController) PracticeEdit() {
 	fmt.Println("编辑")
 	pid := this.Input().Get("pid")
 	fmt.Println(pid)
+	year := this.Input().Get("year")
+	fmt.Println(year)
 	o := orm.NewOrm()
 	var maps []orm.Params
 	practice := new(models.Practice)
-	num, err := o.QueryTable(practice).Filter("Pid", pid).Values(&maps)
+	num, err := o.QueryTable(practice).Filter("Pid", pid).Filter("Year", year).Values(&maps)
 	if err == nil {
 		fmt.Printf("Result Nums: %d\n", num)
 		this.Data["m"] = maps
@@ -147,7 +162,9 @@ func (this *PracticeController) PracticeDelete() {
 	practice := new(models.Practice)
 	pid := strings.TrimSpace(this.GetString("pid"))
 	fmt.Println(pid)
-	num, err := o.QueryTable(practice).Filter("Pid", pid).Delete()
+	year := this.Input().Get("year")
+	fmt.Println(year)
+	num, err := o.QueryTable(practice).Filter("Pid", pid).Filter("Year", year).Delete()
 	if err == nil {
 		fmt.Printf("删除成功")
 		fmt.Printf("Result Nums: %d\n", num)

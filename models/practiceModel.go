@@ -1,7 +1,8 @@
 package models
 
 type Practice struct {
-	Pid      int64 `orm:"PK"`
+	Id       int64
+	Pid      int64
 	Punit    string
 	Pname    string `orm:"index"`
 	Pcg1     string `orm:"index"`

@@ -54,15 +54,27 @@ func (this *PmController) PmAdd() {
 //新建
 func (this *PmController) PmAddAction() {
 	fmt.Println("post新建")
+	m := new(models.Pm)
 	pm := models.Pm{}
 
 	if err := this.ParseForm(&pm); err != nil {
 		fmt.Println("获取表单数据失败")
 	}
+	//获取year和Pmid
+	year := pm.Year
+	pmid := pm.Pmid
+	fmt.Println("获取pmid_info", year, pmid)
 	fmt.Println("获取表单数据成功")
-	if _, err := orm.NewOrm().Insert(&pm); err != nil {
-		fmt.Println("插入失败")
+	o := orm.NewOrm()
+	exist := o.QueryTable(m).Filter("Pmid", pmid).Filter("Year", year).Exist()
+	if exist {
+		fmt.Println("插入失败,已存在该专业")
 		this.ajaxMsg("", MSG_ERR)
+	} else {
+		if _, err := o.Insert(&pm); err != nil {
+			fmt.Println("插入失败")
+			this.ajaxMsg("", MSG_ERR)
+		}
 	}
 	this.ajaxMsg("", MSG_OK)
 	return
@@ -127,10 +139,12 @@ func (this *PmController) PmEdit() {
 	fmt.Println("编辑")
 	pmid := this.Input().Get("pmid")
 	fmt.Println(pmid)
+	year := this.Input().Get("year")
+	fmt.Println(year)
 	o := orm.NewOrm()
 	var maps []orm.Params
 	pm := new(models.Pm)
-	num, err := o.QueryTable(pm).Filter("Pmid", pmid).Values(&maps)
+	num, err := o.QueryTable(pm).Filter("Pmid", pmid).Filter("Year", year).Values(&maps)
 	if err == nil {
 		fmt.Printf("Result Nums: %d\n", num)
 		this.Data["m"] = maps
@@ -166,7 +180,9 @@ func (this *PmController) PmDelete() {
 	pm := new(models.Pm)
 	pmid := strings.TrimSpace(this.GetString("pmid"))
 	fmt.Println(pmid)
-	num, err := o.QueryTable(pm).Filter("Pmid", pmid).Delete()
+	year := this.Input().Get("year")
+	fmt.Println(year)
+	num, err := o.QueryTable(pm).Filter("Pmid", pmid).Filter("Year", year).Delete()
 	if err == nil {
 		fmt.Printf("删除成功")
 		fmt.Printf("Result Nums: %d\n", num)

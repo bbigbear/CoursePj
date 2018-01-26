@@ -18,6 +18,7 @@
 					    <div class="panel-body">
 						{{range .m}}
 						<form class="form-horizontal" role="form" id="editCourse">
+							<input type="hidden" name="Id" value="{{.Id}}">
 					        <div class="form-group">				
 								<label class="col-sm-2 control-label">课程代码</label>			
 								<div class="col-sm-10">
@@ -104,7 +105,7 @@
 							<div class="form-group">				
 								<label class="col-sm-2 control-label">年级</label>			
 								<div class="col-sm-10">
-								<input class="form-control" name="Year" value="{{.Year}}">
+								<input class="form-control" name="Year" value="{{.Year}}" id="year">
 								</div>
 							</div>
 							<div class="form-group">							
@@ -144,10 +145,11 @@
 			}
 			function DeleteInput(){
 				var cid=document.getElementById("cid")
+				var year=document.getElementById("year")
 				$.ajax({
 					type:"POST",
 					url:"{{urlfor "HomeController.TheoryCourseDelete"}}",
-					data:{cid:cid.value},
+					data:{cid:cid.value,year:year.value},
 					async:false,
 					error:function(request){
 						alert("post error")				

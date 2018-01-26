@@ -63,7 +63,7 @@
 												{{range .m1}}		
 												<tr>
 													<th><input type="checkbox" value="{{.Pmid}}" name="pm1id"></th>
-													<th><a href="/pm/edit?pmid={{.Pmid}}">编辑</a></th>
+													<th><a href="/pm/edit?pmid={{.Pmid}}&year={{.Year}}">编辑</a></th>
 													<th>{{.Faculty}}</th>
 													<th>{{.Pmid}}</th>
 													<th>{{.Pmname}}</th>
@@ -107,7 +107,7 @@
 												{{range .m}}
 												<tr>
 													<th><input type="checkbox" value="{{.pmid}}"></th>
-													<th><a href="/pm/edit?pmid={{.Pmid}}">编辑</a></th>
+													<th><a href="/pm/edit?pmid={{.Pmid}}&year={{.Year}}">编辑</a></th>
 													<th>{{.Faculty}}</th>
 													<th>{{.Pmid}}</th>
 													<th>{{.Pmname}}</th>

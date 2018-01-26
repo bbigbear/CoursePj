@@ -66,7 +66,7 @@
 								</tr>
 								{{range .m}}
 								<tr>
-									<th><a href="/home/edit?cid={{.Cid}}">编辑</a></th>
+									<th><a href="/home/edit?cid={{.Cid}}&year={{.Year}}">编辑</a></th>
 									<th>{{.Cid}}</th>
 									<th>{{.Cunit}}</th>
 									<th>{{.Cname}}</th>

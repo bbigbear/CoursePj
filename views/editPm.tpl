@@ -18,6 +18,7 @@
 					    <div class="panel-body">
 						{{range .m}}
 						<form class="form-horizontal" role="form" id="editPm">
+							<input type="hidden" name="Id" value="{{.Id}}">
 					        <div class="form-group">				
 								<label class="col-sm-2 control-label">专业代码</label>			
 								<div class="col-sm-10">
@@ -63,7 +64,7 @@
 							<div class="form-group">				
 								<label class="col-sm-2 control-label">年级</label>			
 								<div class="col-sm-10">
-								<input class="form-control" name="Year" value="{{.Year}}">
+								<input class="form-control" name="Year" value="{{.Year}}" id="year">
 								</div>
 							</div>
 							<div class="form-group">							
@@ -103,10 +104,11 @@
 			}
 			function DeleteInput(){
 				var pmid=document.getElementById("pmid")
+				var year=document.getElementById("year")
 				$.ajax({
 					type:"POST",
 					url:"{{urlfor "PmController.PmDelete"}}",
-					data:{pmid:pmid.value},
+					data:{pmid:pmid.value,year:year.value},
 					async:false,
 					error:function(request){
 						alert("post error")				

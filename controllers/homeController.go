@@ -36,16 +36,28 @@ func (this *HomeController) TheoryCourseAdd() {
 //新建
 func (this *HomeController) TheoryCourseAddAction() {
 	fmt.Println("post新建")
+	tc := new(models.TheoryCourse)
 	theoryCourse := models.TheoryCourse{}
-
 	if err := this.ParseForm(&theoryCourse); err != nil {
 		fmt.Println("获取表单数据失败")
 	}
+	//获取year和cid
+	year := theoryCourse.Year
+	cid := theoryCourse.Cid
+	fmt.Println("获取cid_info", year, cid)
 	fmt.Println("获取表单数据成功")
-	if _, err := orm.NewOrm().Insert(&theoryCourse); err != nil {
-		fmt.Println("插入失败")
+	o := orm.NewOrm()
+	exist := o.QueryTable(tc).Filter("Cid", cid).Filter("Year", year).Exist()
+	if exist {
+		fmt.Println("插入失败,存在相同项")
 		this.ajaxMsg("", MSG_ERR)
+	} else {
+		if _, err := o.Insert(&theoryCourse); err != nil {
+			fmt.Println("插入失败")
+			this.ajaxMsg("", MSG_ERR)
+		}
 	}
+
 	this.ajaxMsg("", MSG_OK)
 	return
 }
@@ -111,10 +123,12 @@ func (this *HomeController) TheoryCourseEdit() {
 	fmt.Println("编辑")
 	cid := this.Input().Get("cid")
 	fmt.Println(cid)
+	year := this.Input().Get("year")
+	fmt.Println(year)
 	o := orm.NewOrm()
 	var maps []orm.Params
 	theoryCourse := new(models.TheoryCourse)
-	num, err := o.QueryTable(theoryCourse).Filter("Cid", cid).Values(&maps)
+	num, err := o.QueryTable(theoryCourse).Filter("Cid", cid).Filter("Year", year).Values(&maps)
 	if err == nil {
 		fmt.Printf("Result Nums: %d\n", num)
 		this.Data["m"] = maps
@@ -150,7 +164,9 @@ func (this *HomeController) TheoryCourseDelete() {
 	theoryCourse := new(models.TheoryCourse)
 	cid := strings.TrimSpace(this.GetString("cid"))
 	fmt.Println(cid)
-	num, err := o.QueryTable(theoryCourse).Filter("Cid", cid).Delete()
+	year := this.Input().Get("year")
+	fmt.Println(year)
+	num, err := o.QueryTable(theoryCourse).Filter("Cid", cid).Filter("Year", year).Delete()
 	if err == nil {
 		fmt.Printf("删除成功")
 		fmt.Printf("Result Nums: %d\n", num)
