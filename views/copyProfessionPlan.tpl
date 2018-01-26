@@ -88,6 +88,17 @@
     	</div>
 		<script type="text/javascript">
 			
+			//自动加载
+			$(function(){
+				if({{.y}}!=""){
+					$("#year").val({{.y}})
+				}
+				if({{.f}}!=""){
+					$("#faculty").val({{.f}})
+				}													
+				//alert("自动加载")			
+			})
+			
 			function QueryInput(){
 				var year=document.getElementById("year")
 				var faculty=document.getElementById("faculty")
@@ -96,23 +107,7 @@
 				}else{
 					window.location.href="/copyplan/profession/search?year="+year.value+"&faculty="+faculty.value
 				}
-				// $.ajax({
-				// 		type:"POST",
-				// 		url:"/copyplan/profession/search",
-				// 		data:{year:year.value,faculty:faculty.value},
-				// 		async:false,
-				// 		error:function(request){
-				// 			alert("post error")		
-				// 		},
-				// 		success:function(data){
-				// 			alert(data.status)
-				// 			if(data.status==0){
-				// 				//alert("删除成功")						
-				// 			}else{
-				// 				alert("查询失败")
-				// 			}						
-				// 		}					
-				// 	});
+			
 			}
 			function CopyInput(){
 				//alert("点击复制按钮")
@@ -165,7 +160,7 @@
 					    success:function(data){  
 					        if(data.status==0){
 								alert("移除成功")
-								window.location.href="/copyplan/profession/search?year="+year.value+"&faculty="+{{.f}}
+								window.location.href="/copyplan/profession/search?year="+{{.y}}+"&faculty="+{{.f}}
 							}else{
 								alert("移除失败")
 							}

@@ -71,7 +71,7 @@ func (this *CopyPlanController) PPSearch() {
 		filters = append(filters, "Year", year)
 	}
 	fmt.Println("Year:", year)
-
+	this.Data["y"] = year
 	var maps []orm.Params
 	query := o.QueryTable(pm)
 	pt := new(models.Ptcourse)
@@ -115,7 +115,7 @@ func (this *CopyPlanController) PPSearch() {
 		fmt.Println("plan num:", num)
 		for _, m := range maps_plan {
 			//plid := fmt.Sprint(maps_plan["Plid"])
-			err := o.QueryTable(pm).Filter("Pmname", m["Pmname"]).One(&pm_info)
+			err := o.QueryTable(pm).Filter("Pmid", m["Plid"]).One(&pm_info)
 			if err == nil {
 				fmt.Println("om_info,pmname:", pm_info.Pmname)
 				slice_plan = append(slice_plan, pm_info.Pmname)
@@ -126,6 +126,7 @@ func (this *CopyPlanController) PPSearch() {
 		this.Data["slice_plan_len"] = len(slice_plan)
 
 	}
+
 	this.TplName = "copyProfessionPlan.tpl"
 	//this.ajaxMsg("", MSG_OK)
 	return
@@ -147,21 +148,30 @@ func (this *CopyPlanController) PPCopy() {
 	var pm_info models.Pm
 	o := orm.NewOrm()
 
-	err1 := o.QueryTable(pm).Filter("Pmname", pmname).One(&pm_info)
-	if err1 == nil {
-		plan.Plname = pm_info.Pmname
-		plan.Faculty = faculty
-		plan.Year = year
-		num, err := o.Insert(plan)
-		if err != nil {
-			fmt.Println("插入失败")
-			this.ajaxMsg("", MSG_ERR)
+	//先查询
+	exist := o.QueryTable(plan).Filter("Plname", pmname).Filter("Year", year).Exist()
+	if exist {
+		fmt.Println("已存在")
+		this.ajaxMsg("", MSG_ERR)
+	} else {
+		err1 := o.QueryTable(pm).Filter("Pmname", pmname).One(&pm_info)
+		if err1 == nil {
+			plan.Plid = pm_info.Pmid
+			plan.Plname = pm_info.Pmname
+			plan.Faculty = faculty
+			plan.Year = year
+			num, err := o.Insert(plan)
+			if err != nil {
+				fmt.Println("插入失败")
+				this.ajaxMsg("", MSG_ERR)
+			}
+			fmt.Println("成功插入num:", num)
+			this.ajaxMsg("", MSG_OK)
+
 		}
-		fmt.Println("成功插入num:", num)
-		this.ajaxMsg("", MSG_OK)
-		return
 
 	}
+	return
 
 }
 
@@ -259,6 +269,7 @@ func (this *CopyPlanController) GYSearch() {
 		if err == nil {
 			this.Data["maps_right"] = maps_right
 			this.Data["l1"] = num
+			this.Data["year_right"] = year_right
 		}
 	}
 
@@ -279,18 +290,33 @@ func (this *CopyPlanController) GYCopy() {
 	fmt.Println("copy year:", year)
 
 	plan := new(models.Plan)
+	pm := new(models.Pm)
+	var pm_info models.Pm
 	o := orm.NewOrm()
 
-	plan.Plname = plname
-	plan.Faculty = faculty
-	plan.Year = year
-	num, err := o.Insert(plan)
-	if err != nil {
-		fmt.Println("插入失败")
+	//先查询
+	exist := o.QueryTable(plan).Filter("Plname", plname).Filter("Year", year).Exist()
+	if exist {
+		fmt.Println("已存在")
 		this.ajaxMsg("", MSG_ERR)
+	} else {
+		err1 := o.QueryTable(pm).Filter("Pmname", plname).One(&pm_info)
+		if err1 == nil {
+			plan.Plid = pm_info.Pmid
+			plan.Plname = pm_info.Pmname
+			plan.Faculty = faculty
+			plan.Year = year
+			num, err := o.Insert(plan)
+			if err != nil {
+				fmt.Println("插入失败")
+				this.ajaxMsg("", MSG_ERR)
+			}
+			fmt.Println("成功插入num:", num)
+			this.ajaxMsg("", MSG_OK)
+
+		}
+
 	}
-	fmt.Println("成功插入num:", num)
-	this.ajaxMsg("", MSG_OK)
 	return
 
 }
@@ -300,21 +326,20 @@ func (this *CopyPlanController) GYRemove() {
 	pmname := this.Input().Get("pmname")
 	fmt.Println("copy pmname:", pmname)
 
-	plan := new(models.Plan)
-	pm := new(models.Pm)
-	var pm_info models.Pm
-	o := orm.NewOrm()
-	err1 := o.QueryTable(pm).Filter("Pmname", pmname).One(&pm_info)
-	if err1 == nil {
-		//plan.Plid = pm_info.Pmid
-		num, err := o.QueryTable(plan).Filter("Plid", pm_info.Pmid).Delete()
-		if err == nil {
-			fmt.Printf("删除成功")
-			fmt.Printf("Result Nums: %d\n", num)
-		}
-		this.ajaxMsg("", MSG_OK)
-		return
-
+	year, err := strconv.ParseInt(this.Input().Get("year"), 10, 64)
+	if err != nil {
+		fmt.Println("year error!")
 	}
+
+	plan := new(models.Plan)
+	o := orm.NewOrm()
+	num, err := o.QueryTable(plan).Filter("Plname", pmname).Filter("Year", year).Delete()
+	if err == nil {
+		fmt.Printf("删除成功")
+		fmt.Printf("Result Nums: %d\n", num)
+	} else {
+		this.ajaxMsg("", MSG_ERR)
+	}
+	this.ajaxMsg("", MSG_OK)
 
 }

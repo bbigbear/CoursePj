@@ -100,6 +100,20 @@
     	</div>
 		<script type="text/javascript">
 			
+			//自动加载
+			$(function(){
+				if({{.y}}!=""){
+					$("#year").val({{.y}})
+				}
+				if({{.year_right}}!="")	{
+					$("#year_right").val({{.year_right}})
+				}
+				if({{.f}}!=""){
+					$("#faculty").val({{.f}})
+				}										
+				//alert("自动加载")			
+			})
+			
 			function QueryInput(){
 				var year=document.getElementById("year")
 				var faculty=document.getElementById("faculty")
@@ -140,7 +154,7 @@
 					    success:function(data){  
 					        if(data.status==0){
 								alert("复制成功")
-								window.location.href="/copyplan/profession/search?year="+year.value+"&faculty="+{{.f}}+"&year_right="+year_right.value
+								window.location.href="/copyplan/year/search?year="+year.value+"&faculty="+{{.f}}+"&year_right="+year_right.value
 							}else{
 								alert("复制失败，已存在专业")
 							}
@@ -157,12 +171,14 @@
 			}
 			function RemoveInput(){
 				//alert("点击移除按钮")
-				var pmname=document.getElementById("open_class_list")
-				if($("#open_class_list").val()!=null){
+				var pmname=document.getElementById("right_list")
+				var year_right=document.getElementById("year_right")
+				if($("#right_list").val()!=null){
 					$.ajax({  
-					    url: "{{urlfor "CopyPlanController.PPRemove"}}",  
+					    url: "{{urlfor "CopyPlanController.GYRemove"}}",  
 					    data: { 
 							pmname: pmname.value,
+							year: year_right.value,
 						},    
 					    type: "POST",
 						async:false,
@@ -172,7 +188,7 @@
 					    success:function(data){  
 					        if(data.status==0){
 								alert("移除成功")
-								window.location.href="/copyplan/profession/search?year="+year.value+"&faculty="+{{.f}}
+								window.location.href="/copyplan/year/search?year="+year.value+"&faculty="+{{.f}}
 							}else{
 								alert("移除失败")
 							}
