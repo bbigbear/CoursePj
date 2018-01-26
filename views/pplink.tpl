@@ -27,7 +27,7 @@
 								</select>							
 								<label>院系</label>
 								<select class="form-control" name="faculty" id="faculty">
-								{{range .m}}
+								{{range .f}}
 								<option>{{.}}</option>
 								{{end}}				
 								</select>			

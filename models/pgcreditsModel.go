@@ -10,4 +10,6 @@ type Pgcredits struct {
 	Professional_limit_credit   float64
 	Practice_credit             float64
 	Total_credit                float64
+	Year                        int64  `orm:"index"`
+	Faculty                     string `orm:"index"`
 }

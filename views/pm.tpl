@@ -25,8 +25,13 @@
 								<option>2017</option>
 								<option>2018</option>
 								</select>
-								<label>院系</label>			
-								<input class="form-control" name="s_Pmfaculty" id="s_Pmfaculty">
+								<label>院系</label>
+								<select class="form-control" name="s_Pmfaculty" id="s_Pmfaculty">
+								{{range .f}}
+								<option>{{.}}</option>
+								{{end}}				
+								</select>		
+<!--								<input class="form-control" name="s_Pmfaculty" id="s_Pmfaculty">-->
 								<button type="button" class="btn btn-default" onclick="return QueryInput()">检索</button>				
 							</div>
 						</form>

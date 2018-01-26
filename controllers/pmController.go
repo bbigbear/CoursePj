@@ -21,6 +21,7 @@ func (this *PmController) Get() {
 	query := o.QueryTable(pm).Filter("Status", "可用")
 	query1 := o.QueryTable(pm).Filter("Status", "停用")
 
+	var slice []string
 	//可用
 	num, err := query.Values(&maps)
 	if err == nil {
@@ -28,6 +29,8 @@ func (this *PmController) Get() {
 		this.Data["m"] = maps
 		this.Data["num"] = num
 		for _, m := range maps {
+			faculty := fmt.Sprint(m["Faculty"])
+			slice = append(slice, faculty)
 			fmt.Println(m["Year"], m["Faculty"], m["Status"])
 		}
 	}
@@ -41,6 +44,7 @@ func (this *PmController) Get() {
 			fmt.Println(m1["Year"], m1["Faculty"], m1["Status"])
 		}
 	}
+	this.Data["f"] = this.RemoveRepBySlice(slice)
 
 	this.TplName = "pm.tpl"
 }

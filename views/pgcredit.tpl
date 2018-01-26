@@ -100,10 +100,12 @@
 			}
 			function SetInput(){				
 				var pmname=document.getElementById("Pmslice_NotSet")
+				var year=document.getElementById("year")
+				var faculty=document.getElementById("faculty")
 				//alert($("#Pmid").is(":checked"))
 				//alert($("#Pmslice_Set").val())
 				if ($("#Pmslice_NotSet").val()!=null){
-					window.location.href="/pgcredit/add?pmname="+pmname.value
+					window.location.href="/pgcredit/add?pmname="+pmname.value+"&year="+year.value+"&faculty="+faculty.value
 				}else{
 					alert("请选择专业再设置学分")
 				}

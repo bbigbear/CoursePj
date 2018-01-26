@@ -35,15 +35,19 @@ func (this *PPLinkController) Get() {
 		}
 	}
 	//专业
+	var slice []string
 	num1, err := query1.Values(&maps)
 	if err == nil {
 		fmt.Printf("Result Nums: %d\n", num)
 		this.Data["m1"] = maps
 		this.Data["num1"] = num1
 		for _, m1 := range maps {
+			faculty := fmt.Sprint(m1["Faculty"])
+			slice = append(slice, faculty)
 			fmt.Println(m1["Year"], m1["Faculty"], m1["Status"])
 		}
 	}
+	this.Data["f"] = this.RemoveRepBySlice(slice)
 
 	this.TplName = "pplink.tpl"
 }

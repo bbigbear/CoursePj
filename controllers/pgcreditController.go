@@ -19,8 +19,15 @@ func (this *PGCreditController) Get() {
 	var maps []orm.Params
 	pm := new(models.Pm)
 	pgc := new(models.Pgcredits)
+	year := this.Input().Get("year")
+	faculty := this.Input().Get("faculty")
 	query := o.QueryTable(pm).Filter("Status", "可用")
 	query_pgc := o.QueryTable(pgc)
+	if year != "" && faculty != "" {
+		query = query.Filter("Year", year).Filter("Faculty", faculty)
+		query_pgc = query_pgc.Filter("Year", year).Filter("Faculty", faculty)
+	}
+
 	//专业列表
 	var Pmslice []string
 	//mac
@@ -31,13 +38,16 @@ func (this *PGCreditController) Get() {
 	var Pmslice_Set []string
 	//合并列表
 	//	var slice_merge []string
-
+	var slice []string
 	//专业
 	num, err := query.Values(&maps)
 	if err == nil {
 		fmt.Printf("Result Nums: %d\n", num)
 
 		for _, m := range maps {
+			//获取院系
+			faculty := fmt.Sprint(m["Faculty"])
+			slice = append(slice, faculty)
 			pmname := fmt.Sprint(m["Pmname"])
 			pmid := fmt.Sprint(m["Pmid"])
 			id, err := strconv.ParseInt(pmid, 10, 64)
@@ -79,6 +89,8 @@ func (this *PGCreditController) Get() {
 	this.Data["Pmslice_NotSet"] = Pmslice_NotSet
 	this.Data["Pmslice_NotSet_count"] = len(Pmslice_NotSet)
 
+	this.Data["m"] = this.RemoveRepBySlice(slice)
+
 	this.TplName = "pgcredit.tpl"
 }
 
@@ -95,6 +107,8 @@ func (this *PGCreditController) PgcAdd() {
 //保存专业学分
 func (this *PGCreditController) PgcSave() {
 	pmname := this.Input().Get("pmname")
+	year := this.Input().Get("year")
+	faculty := this.Input().Get("faculty")
 	ggbx, err := strconv.ParseFloat(this.Input().Get("ggbx"), 64)
 	if err != nil {
 		fmt.Println("ggbx error!")
@@ -129,11 +143,12 @@ func (this *PGCreditController) PgcSave() {
 	pm := new(models.Pm)
 	pgc := new(models.Pgcredits)
 	var pm_info models.Pm
-	err1 := o.QueryTable(pm).Filter("Pmname", pmname).One(&pm_info)
+	err1 := o.QueryTable(pm).Filter("Pmname", pmname).Filter("Year", year).Filter("Faculty", faculty).One(&pm_info)
 	if err1 == nil {
 		pmid := pm_info.Pmid
 		//插入专业学分
 		fmt.Println("pmid:", pmid)
+		pgc.Year = pm_info.Year
 		pgc.Pgcid = pmid
 		pgc.Open_require_credit = ggbx
 		pgc.Open_option_credit = ggrx
