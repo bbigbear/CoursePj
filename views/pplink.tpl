@@ -16,6 +16,30 @@
 							<h4 class="panel-title">设置专业实践环节</h4>
 						</div>
 					    <div class="panel-body">
+						<form class="form-inline" role="form" id="searchPm">
+					        <div class="form-group">				
+								<label>年级</label>			
+								<select class="form-control" name="year" id="year">
+								<option>2015</option>
+								<option>2016</option>
+								<option>2017</option>
+								<option>2018</option>
+								</select>							
+								<label>院系</label>
+								<select class="form-control" name="faculty" id="faculty">
+								{{range .m}}
+								<option>{{.}}</option>
+								{{end}}				
+								</select>			
+								<button type="button" class="btn btn-default" onclick="return QueryInput()">检索</button>				
+							</div>
+						</form>						
+						</div>																	
+					</div>					
+				</div>
+				<div class="col-sm-10">
+					<div class="panel panel-primary">						
+					    <div class="panel-body">
 						<!--<form class="form-inline" role="form" id="searchCourse">					        
 							<div class="form-group">						
 								<label>所属的年级</label>

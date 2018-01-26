@@ -10,11 +10,35 @@
 		<div class="container-fluid" style="padding-top:50px">
       		<div class="row">
         		{{template "LeftBar"}}
-				<div class="col-sm-5">
+				<div class="col-sm-10">
 					<div class="panel panel-primary">
 						<div class="panel-heading">
-							<h4 class="panel-title">未设置专业毕业学分</h4>
+							<h4 class="panel-title">设置专业毕业学分</h4>
 						</div>
+					    <div class="panel-body">
+						<form class="form-inline" role="form" id="searchPm">
+					        <div class="form-group">				
+								<label>年级</label>			
+								<select class="form-control" name="year" id="year">
+								<option>2015</option>
+								<option>2016</option>
+								<option>2017</option>
+								<option>2018</option>
+								</select>							
+								<label>院系</label>
+								<select class="form-control" name="faculty" id="faculty">
+								{{range .m}}
+								<option>{{.}}</option>
+								{{end}}				
+								</select>			
+								<button type="button" class="btn btn-default" onclick="return QueryInput()">检索</button>				
+							</div>
+						</form>						
+						</div>																	
+					</div>					
+				</div>
+				<div class="col-sm-5">
+					<div class="panel panel-primary">
 					    <div class="panel-body">
 						<div class="row">				
 					    <div class="col-sm-6">							
@@ -37,10 +61,7 @@
 					</div>					
 				</div>
 				<div class="col-sm-5">
-					<div class="panel panel-primary">
-						<div class="panel-heading">
-							<h4 class="panel-title">已设置专业毕业学分</h4>
-						</div>
+					<div class="panel panel-primary">						
 						<div class="panel-body">
 						<div class="row">				
 						    <div class="col-sm-6">							
