@@ -115,11 +115,29 @@
       		</div>
     	</div>
 		<script type="text/javascript">
+			//自动加载
+			$(function(){
+				if({{.y}}!=""){
+					$("#year").val({{.y}})
+				}
+				if({{.f}}!=""){
+					$("#faculty").val({{.f}})
+				}													
+				//alert("自动加载")			
+			})
+			
+			function QueryInput(){
+				//alert("点击检索")
+				var year=document.getElementById("year")
+				var faculty=document.getElementById("faculty")
+				window.location.href="/pplink/search?year="+year.value+"&faculty="+faculty.value
+			}
 			
 			function EditInput(){				
 				var pmid=document.getElementById("Pmid")
+				var year=document.getElementById("year")
 				if ($("#Pmid").val()!=null){
-					window.location.href="/pplink/edit?pmid="+pmid.value
+					window.location.href="/pplink/edit?pmid="+pmid.value+"&year="+year.value
 				}else{
 					alert("请选择专业再查看")
 				}

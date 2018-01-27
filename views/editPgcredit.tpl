@@ -60,6 +60,7 @@
 								<button type="button" class="btn btn-primary" onclick="return DelInput()">删除</button>
 							</div>
 						</div>
+						<input type="hidden" name="Id" value="{{.Id}}" id="id">
 					{{end}}	
 					</div>
 				</div>
@@ -67,14 +68,21 @@
 		</div>
 		<script type="text/javascript">
 			function  UpdateInput(){
-				//alert("点击更新按钮")	
+				//alert("点击更新按钮")
+				//alert({{.y}})
+				//alert({{.f}})
 				var llxiaoji=parseFloat($("#ggbx").val())+parseFloat($("#ggrx").val())+parseFloat($("#zybx").val())+parseFloat($("#zyxx").val())+parseFloat($("#zyrx").val())
 				var sjxiaoji=parseFloat($("#sjxf").val())
-				var zxf=llxiaoji+sjxiaoji		
+				var zxf=llxiaoji+sjxiaoji
+				var id=	$("#id").val()
+				alert(id)
 				$.ajax({
 					type:"POST",
 					url:"{{urlfor "PGCreditController.PgcUpdate"}}",
 					data:{
+						id:id,
+						year:{{.y}},
+						faculty:{{.f}},
 						pmname:{{.pmname}},
 						ggbx:parseFloat($("#ggbx").val()),
 						ggrx:parseFloat($("#ggrx").val()),
@@ -91,7 +99,7 @@
 					success:function(data){
 						if(data.status==0){
 							alert("更新成功")
-							window.location.href="/pgcredit/edit?pmname="+{{.pmname}}
+							window.location.href="/pgcredit/edit?pmname="+{{.pmname}}+"&year="+{{.y}}+"&faculty="+{{.f}}
 						}else{
 							alert("更新失败")
 						}
@@ -114,10 +122,11 @@
 		}
 		function DelInput(){
 			//alert("点击删除")
+			var id=	$("#id").val()
 				$.ajax({
 					type:"POST",
 					url:"{{urlfor "PGCreditController.PgcDel"}}",
-					data:{pmname:{{.pmname}}},
+					data:{id:id},
 					async:false,
 					error:function(request){
 						alert("post error")				
@@ -125,7 +134,7 @@
 					success:function(data){
 						if(data.status==0){
 							alert("删除成功")
-							window.location.href="/pgcredit"
+							window.location.href="/pgcredit/search?year="+{{.y}}+"&faculty="+{{.f}}
 						}else{
 							alert("删除失败")
 						}						

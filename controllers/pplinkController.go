@@ -52,6 +52,57 @@ func (this *PPLinkController) Get() {
 	this.TplName = "pplink.tpl"
 }
 
+//检索
+func (this *PPLinkController) PPLinkSearch() {
+	o := orm.NewOrm()
+	var maps []orm.Params
+	pm := new(models.Pm)
+	year := this.Input().Get("year")
+	this.Data["y"] = year
+	faculty := this.Input().Get("faculty")
+	this.Data["f"] = faculty
+	practice := new(models.Practice)
+	query := o.QueryTable(practice).Filter("Status", "可用").Filter("Year", year)
+	query1 := o.QueryTable(pm).Filter("Status", "可用").Filter("Year", year).Filter("Faculty", faculty)
+	//院系下拉框
+	query2 := o.QueryTable(pm).Filter("Status", "可用")
+	var slice []string
+	num, err1 := query2.Values(&maps)
+	if err1 == nil {
+		fmt.Printf("Result Nums: %d\n", num)
+		for _, m := range maps {
+			//获取院系
+			faculty := fmt.Sprint(m["Faculty"])
+			slice = append(slice, faculty)
+
+		}
+		this.Data["f"] = this.RemoveRepBySlice(slice)
+	}
+
+	//实践环节
+	num, err := query.Values(&maps)
+	if err == nil {
+		fmt.Printf("Result Nums: %d\n", num)
+		this.Data["m"] = maps
+		this.Data["num"] = num
+		for _, m := range maps {
+			fmt.Println(m["Year"], m["Faculty"], m["Status"])
+		}
+	}
+	//专业
+	num1, err := query1.Values(&maps)
+	if err == nil {
+		fmt.Printf("Result Nums: %d\n", num)
+		this.Data["m1"] = maps
+		this.Data["num1"] = num1
+		for _, m1 := range maps {
+			fmt.Println(m1["Year"], m1["Faculty"], m1["Status"])
+		}
+	}
+
+	this.TplName = "pplink.tpl"
+}
+
 //专业设置课程
 func (this *PPLinkController) Setcourse() {
 	fmt.Println("接收到课程")
@@ -112,7 +163,8 @@ func (this *PPLinkController) PPLinkEdit() {
 	fmt.Println("查看专业课程")
 	pmid := this.Input().Get("pmid")
 	fmt.Println(pmid)
-
+	year := this.Input().Get("year")
+	this.Data["y"] = year
 	//取其中的pmid
 	reg := regexp.MustCompile(`[[:digit:]]+`)
 	pmidlist := reg.FindAllString(pmid, -1)
@@ -130,7 +182,7 @@ func (this *PPLinkController) PPLinkEdit() {
 		var slice []string
 		for _, m := range maps {
 			fmt.Println("map_cid:", m["Pid"])
-			err := o.QueryTable(practice).Filter("Pid", m["Pid"]).One(&practice_info)
+			err := o.QueryTable(practice).Filter("Pid", m["Pid"]).Filter("Year", year).One(&practice_info)
 			if err == nil {
 				fmt.Println("tc_info:", practice_info.Pname)
 				slice = append(slice, practice_info.Pname)
@@ -157,6 +209,7 @@ func (this *PPLinkController) PPLinkDelete() {
 
 	pmid := this.Input().Get("pmid")
 	fmt.Println("pmid:", pmid)
+	year := this.Input().Get("year")
 
 	//取其中的pmid
 	reg := regexp.MustCompile(`[[:digit:]]+`)
@@ -168,7 +221,7 @@ func (this *PPLinkController) PPLinkDelete() {
 	var practice_info models.Practice
 
 	for i := 0; i < pname_count; i++ {
-		err := o.QueryTable(practice).Filter("Pname", pnamelist[i]).One(&practice_info)
+		err := o.QueryTable(practice).Filter("Pname", pnamelist[i]).Filter("Year", year).One(&practice_info)
 		if err == nil {
 			num, err := o.QueryTable(ppl).Filter("Pid", practice_info.Pid).Filter("Pmid", pmidlist[0]).Delete()
 			if err == nil {

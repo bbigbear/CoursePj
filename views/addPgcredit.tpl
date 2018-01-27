@@ -83,6 +83,8 @@
 					url:"{{urlfor "PGCreditController.PgcSave"}}",
 					data:{
 						pmname:{{.pmname}},
+						year:{{.y}},
+						faculty:{{.f}},
 						ggbx:parseFloat($("#ggbx").val()),
 						ggrx:parseFloat($("#ggrx").val()),
 						zybx:parseFloat($("#zybx").val()),
@@ -99,7 +101,7 @@
 					success:function(data){
 						if(data.status==0){
 							alert("保存成功")
-							window.location.href="/pgcredit"
+							window.location.href="/pgcredit/search?year="+{{.y}}+"&faculty="+{{.f}}
 						}else{
 							alert("保存失败")
 						}

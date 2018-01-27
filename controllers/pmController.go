@@ -106,6 +106,21 @@ func (this *PmController) PmSearch() {
 	query := o.QueryTable(pm).Filter("Status", "可用")
 	query1 := o.QueryTable(pm).Filter("Status", "停用")
 
+	//院系下拉框
+	query2 := o.QueryTable(pm).Filter("Status", "可用")
+	var slice []string
+	num, err1 := query2.Values(&maps)
+	if err1 == nil {
+		fmt.Printf("Result Nums: %d\n", num)
+		for _, m := range maps {
+			//获取院系
+			faculty := fmt.Sprint(m["Faculty"])
+			slice = append(slice, faculty)
+
+		}
+		this.Data["f"] = this.RemoveRepBySlice(slice)
+	}
+
 	if len(filters) > 0 {
 		l := len(filters)
 		for k := 0; k < l; k += 2 {
@@ -113,6 +128,7 @@ func (this *PmController) PmSearch() {
 			query1 = query1.Filter(filters[k].(string), filters[k+1])
 		}
 	}
+	//var slice []string
 	//可用
 	num, err := query.Values(&maps)
 	if err == nil {
@@ -120,6 +136,8 @@ func (this *PmController) PmSearch() {
 		this.Data["m"] = maps
 		this.Data["num"] = num
 		for _, m := range maps {
+			//faculty := fmt.Sprint(m["Faculty"])
+			//slice = append(slice, faculty)
 			fmt.Println(m["Year"], m["Faculty"], m["Status"])
 		}
 	}
@@ -133,6 +151,7 @@ func (this *PmController) PmSearch() {
 			fmt.Println(m1["Year"], m1["Faculty"], m1["Status"])
 		}
 	}
+	//this.Data["f"] = this.RemoveRepBySlice(slice)
 
 	this.TplName = "pm.tpl"
 

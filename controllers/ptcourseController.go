@@ -52,6 +52,58 @@ func (this *PTCourseController) Get() {
 	this.TplName = "ptcourse.tpl"
 }
 
+//
+func (this *PTCourseController) PTCourseSearch() {
+	o := orm.NewOrm()
+	var maps []orm.Params
+	pm := new(models.Pm)
+	year := this.Input().Get("year")
+	this.Data["y"] = year
+	faculty := this.Input().Get("faculty")
+	this.Data["f"] = faculty
+	theoryCourse := new(models.TheoryCourse)
+
+	query := o.QueryTable(theoryCourse).Filter("Status", "可用").Filter("Year", year)
+	query1 := o.QueryTable(pm).Filter("Status", "可用").Filter("Year", year).Filter("Faculty", faculty)
+	//院系下拉框
+	query2 := o.QueryTable(pm).Filter("Status", "可用")
+	var slice []string
+	num, err1 := query2.Values(&maps)
+	if err1 == nil {
+		fmt.Printf("Result Nums: %d\n", num)
+		for _, m := range maps {
+			//获取院系
+			faculty := fmt.Sprint(m["Faculty"])
+			slice = append(slice, faculty)
+
+		}
+		this.Data["f"] = this.RemoveRepBySlice(slice)
+	}
+
+	//理论
+	num, err := query.Values(&maps)
+	if err == nil {
+		fmt.Printf("Result Nums: %d\n", num)
+		this.Data["m"] = maps
+		this.Data["num"] = num
+		for _, m := range maps {
+			fmt.Println(m["Year"], m["Faculty"], m["Status"])
+		}
+	}
+	//专业
+	num1, err := query1.Values(&maps)
+	if err == nil {
+		fmt.Printf("Result Nums: %d\n", num)
+		this.Data["m1"] = maps
+		this.Data["num1"] = num1
+		for _, m1 := range maps {
+			fmt.Println(m1["Year"], m1["Faculty"], m1["Status"])
+		}
+	}
+
+	this.TplName = "ptcourse.tpl"
+}
+
 //专业设置课程
 func (this *PTCourseController) Setcourse() {
 	fmt.Println("接收到课程")
@@ -112,7 +164,8 @@ func (this *PTCourseController) PTCourseEdit() {
 	fmt.Println("查看专业课程")
 	pmid := this.Input().Get("pmid")
 	fmt.Println(pmid)
-
+	year := this.Input().Get("year")
+	this.Data["y"] = year
 	//取其中的pmid
 	reg := regexp.MustCompile(`[[:digit:]]+`)
 	pmidlist := reg.FindAllString(pmid, -1)
@@ -130,7 +183,7 @@ func (this *PTCourseController) PTCourseEdit() {
 		var slice []string
 		for _, m := range maps {
 			fmt.Println("map_cid:", m["Cid"])
-			err := o.QueryTable(tc).Filter("Cid", m["Cid"]).One(&tc_info)
+			err := o.QueryTable(tc).Filter("Cid", m["Cid"]).Filter("Year", year).One(&tc_info)
 			if err == nil {
 				fmt.Println("tc_info:", tc_info.Cname)
 				slice = append(slice, tc_info.Cname)
@@ -157,6 +210,7 @@ func (this *PTCourseController) PTCourseDelete() {
 
 	pmid := this.Input().Get("pmid")
 	fmt.Println("pmid:", pmid)
+	year := this.Input().Get("year")
 
 	//取其中的pmid
 	reg := regexp.MustCompile(`[[:digit:]]+`)
@@ -168,7 +222,7 @@ func (this *PTCourseController) PTCourseDelete() {
 	var tc_info models.TheoryCourse
 
 	for i := 0; i < cname_count; i++ {
-		err := o.QueryTable(tc).Filter("Cname", cnamelist[i]).One(&tc_info)
+		err := o.QueryTable(tc).Filter("Cname", cnamelist[i]).Filter("Year", year).One(&tc_info)
 		if err == nil {
 			num, err := o.QueryTable(ptc).Filter("Cid", tc_info.Cid).Filter("Pmid", pmidlist[0]).Delete()
 			if err == nil {

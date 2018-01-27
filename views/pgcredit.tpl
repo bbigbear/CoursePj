@@ -88,12 +88,25 @@
     	</div>
 		<script type="text/javascript">
 			
+			//自动加载
+			$(function(){
+				if({{.y}}!=""){
+					$("#year").val({{.y}})
+				}
+				if({{.f}}!=""){
+					$("#faculty").val({{.f}})
+				}										
+				//alert("自动加载")			
+			})
+			
 			function EditInput(){				
 				var pmname=document.getElementById("Pmslice_Set")
+				var year=document.getElementById("year")
+				var faculty=document.getElementById("faculty")
 				//alert($("#Pmid").is(":checked"))
 				//alert($("#Pmslice_Set").val())
 				if ($("#Pmslice_Set").val()!=null){
-					window.location.href="/pgcredit/edit?pmname="+pmname.value
+					window.location.href="/pgcredit/edit?pmname="+pmname.value+"&year="+year.value+"&faculty="+faculty.value
 				}else{
 					alert("请选择专业再查看学分")
 				}				
@@ -109,8 +122,14 @@
 				}else{
 					alert("请选择专业再设置学分")
 				}
-							
-							
+														
+			}
+			function QueryInput(){
+				//alert("点击检索")
+				var year=document.getElementById("year")
+				var faculty=document.getElementById("faculty")
+				window.location.href="/pgcredit/search?year="+year.value+"&faculty="+faculty.value
+
 			}		
 		</script>
 	</body>

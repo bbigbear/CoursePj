@@ -145,11 +145,13 @@ func (this *CopyPlanController) PPCopy() {
 
 	plan := new(models.Plan)
 	pm := new(models.Pm)
+	//tc:=new(models.TheoryCourse)
+	//p:=new(models.Practice)
 	var pm_info models.Pm
 	o := orm.NewOrm()
 
 	//先查询
-	exist := o.QueryTable(plan).Filter("Plname", pmname).Filter("Year", year).Exist()
+	exist := o.QueryTable(plan).Filter("Plname", pmname).Filter("Year", year).Filter("Faculty", faculty).Exist()
 	if exist {
 		fmt.Println("已存在")
 		this.ajaxMsg("", MSG_ERR)
@@ -162,15 +164,18 @@ func (this *CopyPlanController) PPCopy() {
 			plan.Year = year
 			num, err := o.Insert(plan)
 			if err != nil {
-				fmt.Println("插入失败")
+				fmt.Println("插入plan失败")
 				this.ajaxMsg("", MSG_ERR)
 			}
+			//插入ct,pm
+
 			fmt.Println("成功插入num:", num)
 			this.ajaxMsg("", MSG_OK)
 
 		}
 
 	}
+
 	return
 
 }

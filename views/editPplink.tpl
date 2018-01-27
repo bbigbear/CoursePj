@@ -51,7 +51,7 @@
 					$.ajax({
 						type:"POST",
 						url:"{{urlfor "PPLinkController.PPLinkDelete"}}",
-						data:{pname:data,pmid:{{.pmid}}},
+						data:{pname:data,pmid:{{.pmid}},year:{{.y}}},
 						async:false,
 						error:function(request){
 							alert("post error")		
@@ -59,7 +59,7 @@
 						success:function(data){
 							if(data.status==0){
 								alert("删除成功")
-								window.location.href="/pplink/edit?pmid="+{{.pmid}}
+								window.location.href="/pplink/edit?pmid="+{{.pmid}}+"&year="+{{.y}}
 							}else{
 								alert("删除失败")
 							}						

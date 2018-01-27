@@ -34,17 +34,20 @@ func init() {
 	//专业理论
 	beego.Router("/ptcourse", &controllers.PTCourseController{})
 	beego.Router("/ptcourse/edit", &controllers.PTCourseController{}, "*:PTCourseEdit")
+	beego.Router("/ptcourse/search", &controllers.PTCourseController{}, "*:PTCourseSearch")
 	beego.AutoRouter(&controllers.PTCourseController{})
 
 	//专业实践环节
 	beego.Router("/pplink", &controllers.PPLinkController{})
 	beego.Router("/pplink/edit", &controllers.PPLinkController{}, "*:PPLinkEdit")
+	beego.Router("/pplink/search", &controllers.PPLinkController{}, "*:PPLinkSearch")
 	beego.AutoRouter(&controllers.PPLinkController{})
 
 	//专业学分
 	beego.Router("/pgcredit", &controllers.PGCreditController{})
 	beego.Router("/pgcredit/add", &controllers.PGCreditController{}, "*:PgcAdd")
 	beego.Router("/pgcredit/edit", &controllers.PGCreditController{}, "*:PgcEdit")
+	beego.Router("/pgcredit/search", &controllers.PGCreditController{}, "*:PgcSearch")
 	beego.AutoRouter(&controllers.PGCreditController{})
 
 	//复制计划
