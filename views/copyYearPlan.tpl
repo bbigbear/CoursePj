@@ -143,7 +143,8 @@
 					    url: "{{urlfor "CopyPlanController.GYCopy"}}",  
 					    data: { 
 							plname: plname.value,
-							year: year_right.value,
+							right_year: year_right.value,
+							year: year.value,
 							faculty: {{.f}}
 						},    
 					    type: "POST",
@@ -179,6 +180,7 @@
 					    data: { 
 							pmname: pmname.value,
 							year: year_right.value,
+							faculty: {{.f}}
 						},    
 					    type: "POST",
 						async:false,

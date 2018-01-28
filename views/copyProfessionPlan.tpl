@@ -151,6 +151,8 @@
 					    url: "{{urlfor "CopyPlanController.PPRemove"}}",  
 					    data: { 
 							pmname: pmname.value,
+							year: year.value,
+							faculty: {{.f}}
 						},    
 					    type: "POST",
 						async:false,
