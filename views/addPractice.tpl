@@ -59,19 +59,19 @@
 							<div class="form-group">				
 								<label class="col-sm-2 control-label">学分</label>			
 								<div class="col-sm-10">
-								<input class="form-control" name="Credit">
+								<input class="form-control" name="Credit" type="number">
 								</div>
 							</div>
 							<div class="form-group">				
 								<label class="col-sm-2 control-label">学时</label>			
 								<div class="col-sm-10">
-								<input class="form-control" name="Tclass">
+								<input class="form-control" name="Tclass" type="number">
 								</div>
 							</div>
 							<div class="form-group">				
 								<label class="col-sm-2 control-label">周数</label>			
 								<div class="col-sm-10">
-								<input class="form-control" name="Nw">
+								<input class="form-control" name="Nw" type="number">
 								</div>
 							</div>
 							<div class="form-group">				

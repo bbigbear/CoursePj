@@ -2,7 +2,7 @@ package models
 
 type Practice struct {
 	Id       int64
-	Pid      int64
+	Pid      string
 	Punit    string
 	Pname    string `orm:"index"`
 	Pcg1     string `orm:"index"`

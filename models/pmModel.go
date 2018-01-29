@@ -2,7 +2,7 @@ package models
 
 type Pm struct {
 	Id          int64
-	Pmid        int64
+	Pmid        string
 	Pmname      string `orm:"index"`
 	Pmname_en   string
 	Faculty     string `orm:"index"`

@@ -23,13 +23,24 @@
 								<label>环节名称</label>			
 								<input class="form-control" name="s_Pname" id="s_Pname">
 							</div>
+							<br>
 							<div class="form-group">				
 								<label>环节类别1</label>			
 								<input class="form-control" name="s_Pcg1" id="s_Pcg1">
 								<label>是否停用</label>			
-								<input class="form-control" name="s_Status" id="s_Status">
+								<select class="form-control" name="s_Status" id="s_Status">
+								<option>可用</option>
+								<option>停用</option>
+								</select>
+<!--								<input class="form-control" name="s_Status" id="s_Status">-->
 								<label>所属年级</label>			
-								<input class="form-control" name="s_Year" id="s_Year">
+								<select class="form-control" name="s_Year" id="s_Year">
+								<option>2015</option>
+								<option>2016</option>
+								<option>2017</option>
+								<option>2018</option>
+								</select>
+<!--								<input class="form-control" name="s_Year" id="s_Year">-->
 								<button type="button" class="btn btn-primary" onclick="return QueryInput()">检索</button>				
 							</div>
 						</form>
@@ -81,6 +92,16 @@
       		</div>
     	</div>
 		<script type="text/javascript">
+			//自动加载
+			$(function(){
+				if({{.y}}!=""){
+					$("#s_Year").val({{.y}})
+				}
+				if({{.s}}!=""){
+					$("#s_Status").val({{.s}})
+				}													
+				//alert("自动加载")			
+			})
 			
 			function QueryInput(){
 				var s_Punit=document.getElementById("s_Punit")

@@ -37,18 +37,18 @@
 										<td>&nbsp;</td>
 									</tr>									
 									<tr>
-										<td><input id="ggbx" type="text" class="form-control" value="{{.Open_require_credit}}"></td>
-										<td><input id="ggrx" type="text" class="form-control" value="{{.Open_option_credit}}"></td>
-										<td><input id="zybx" type="text" class="form-control" value="{{.Professional_require_credit}}"></td>
-										<td><input id="zyxx" type="text" class="form-control" value="{{.Professional_option_credit}}"></td>
-										<td><input id="zyrx" type="text" class="form-control" value="{{.Professional_limit_credit}}"></td>
-										<td><input id="llxj" type="text" class="form-control"></td>
-										<td><input id="zxf" type="text" class="form-control" value="{{.Total_credit}}"></td>
+										<td><input id="ggbx"  class="form-control" value="{{.Open_require_credit}}" type="number"></td>
+										<td><input id="ggrx"  class="form-control" value="{{.Open_option_credit}}" type="number"></td>
+										<td><input id="zybx" class="form-control" value="{{.Professional_require_credit}}" type="number"></td>
+										<td><input id="zyxx"  class="form-control" value="{{.Professional_option_credit}}" type="number"></td>
+										<td><input id="zyrx"  class="form-control" value="{{.Professional_limit_credit}}" type="number"></td>
+										<td><input id="llxj"  class="form-control"></td>
+										<td><input id="zxf"  class="form-control" value="{{.Total_credit}}" type="number"></td>
 									</tr>
 									<tr>
 										<td>实际环节</td>
-										<td colspan="5" rowspan="1"><input id="sjxf" type="text" class="form-control" value="{{.Practice_credit}}"></td>
-										<td><input id="sjxj" type="text" class="form-control"></td>
+										<td colspan="5" rowspan="1"><input id="sjxf"  class="form-control" value="{{.Practice_credit}}" type="number"></td>
+										<td><input id="sjxj" class="form-control"></td>
 										<td></td>
 									</tr>
 									

@@ -93,10 +93,12 @@ func (this *PmController) PmSearch() {
 	if Pmyear != "" {
 		filters = append(filters, "Year", Pmyear)
 	}
+	this.Data["y"] = Pmyear
 	Pmfaculty := this.Input().Get("s_Pmfaculty")
 	if Pmfaculty != "" {
 		filters = append(filters, "Faculty", Pmfaculty)
 	}
+	this.Data["f"] = Pmfaculty
 
 	fmt.Println(Pmyear)
 	fmt.Println(len(Pmfaculty))
@@ -173,6 +175,8 @@ func (this *PmController) PmEdit() {
 		this.Data["m"] = maps
 		for _, m := range maps {
 			fmt.Println(m["Pmid"])
+			this.Data["y"] = year
+			this.Data["s"] = m["Status"]
 		}
 	}
 	this.TplName = "editPm.tpl"

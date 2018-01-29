@@ -58,13 +58,23 @@
 							<div class="form-group">				
 								<label class="col-sm-2 control-label">状态</label>			
 								<div class="col-sm-10">
-								<input class="form-control" name="Status" value="{{.Status}}">
+								<select class="form-control" name="Status" id="Status" value="{{.Status}}">
+								<option>可用</option>
+								<option>停用</option>
+								</select>
+<!--								<input class="form-control" name="Status" value="{{.Status}}">-->
 								</div>
 							</div>
 							<div class="form-group">				
 								<label class="col-sm-2 control-label">年级</label>			
 								<div class="col-sm-10">
-								<input class="form-control" name="Year" value="{{.Year}}" id="year">
+								<select class="form-control" name="Year" id="year" value="{{.Year}}">
+								<option>2015</option>
+								<option>2016</option>
+								<option>2017</option>
+								<option>2018</option>
+								</select>
+<!--								<input class="form-control" name="Year" value="{{.Year}}" id="year">-->
 								</div>
 							</div>
 							<div class="form-group">							
@@ -80,6 +90,17 @@
 			</div>			
 		</div>
 		<script type="text/javascript">
+			//自动加载
+			$(function(){
+				if({{.y}}!=""){
+					$("#year").val({{.y}})
+				}
+				if({{.s}}!=""){
+					$("#Status").val({{.s}})
+				}													
+				//alert("自动加载")			
+			})
+			
 			function UpdataInput(){
 				$.ajax({
 					type:"POST",

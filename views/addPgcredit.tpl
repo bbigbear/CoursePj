@@ -36,18 +36,18 @@
 										<td>&nbsp;</td>
 									</tr>
 									<tr>
-										<td><input id="ggbx" type="text" class="form-control" value="0.0"></td>
-										<td><input id="ggrx" type="text" class="form-control" value="0.0"></td>
-										<td><input id="zybx" type="text" class="form-control" value="0.0"></td>
-										<td><input id="zyxx" type="text" class="form-control" value="0.0"></td>
-										<td><input id="zyrx" type="text" class="form-control" value="0.0"></td>
-										<td><input id="llxj" type="text" class="form-control" ></td>
-										<td><input id="zxf" type="text" class="form-control" ></td>
+										<td><input id="ggbx"  class="form-control" value="0.0" type="number"></td>
+										<td><input id="ggrx"  class="form-control" value="0.0" type="number"></td>
+										<td><input id="zybx"  class="form-control" value="0.0" type="number"></td>
+										<td><input id="zyxx"  class="form-control" value="0.0" type="number"></td>
+										<td><input id="zyrx"  class="form-control" value="0.0" type="number"></td>
+										<td><input id="llxj"  class="form-control" ></td>
+										<td><input id="zxf" class="form-control" ></td>
 									</tr>
 									<tr>
 										<td>实际环节</td>
-										<td colspan="5" rowspan="1"><input id="sjxf" type="text" class="form-control" value="0.0"></td>
-										<td><input id="sjxj" type="text" class="form-control"></td>
+										<td colspan="5" rowspan="1"><input id="sjxf"  class="form-control" value="0.0" type="number"></td>
+										<td><input id="sjxj"  class="form-control"></td>
 										<td></td>
 									</tr>
 								</tbody>
@@ -56,8 +56,7 @@
 								<button type="button" class="btn btn-primary" onclick="return SumInput()">计算</button>
 								<button type="button" class="btn btn-primary" onclick="return SaveInput()">保存</button>
 							</div>
-						</div>
-						
+						</div>						
 					</div>
 				</div>
 			</div>			

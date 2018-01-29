@@ -2,7 +2,7 @@ package models
 
 type Pgcredits struct {
 	Id                          int64
-	Pgcid                       int64
+	Pgcid                       string
 	Open_require_credit         float64
 	Open_option_credit          float64
 	Professional_require_credit float64

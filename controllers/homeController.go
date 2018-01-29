@@ -88,10 +88,12 @@ func (this *HomeController) TheoryCourseSearch() {
 	if Status != "" {
 		filters = append(filters, "Status", Status)
 	}
+	this.Data["s"] = Status
 	Year := this.Input().Get("s_Year")
 	if Year != "" {
 		filters = append(filters, "Year", Year)
 	}
+	this.Data["y"] = Year
 
 	fmt.Println(Cunit)
 	fmt.Println(len(Cname))
@@ -134,6 +136,8 @@ func (this *HomeController) TheoryCourseEdit() {
 		this.Data["m"] = maps
 		for _, m := range maps {
 			fmt.Println(m["Cid"])
+			this.Data["y"] = year
+			this.Data["s"] = m["Status"]
 		}
 	}
 	this.TplName = "editTheoryCourse.tpl"

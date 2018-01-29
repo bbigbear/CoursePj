@@ -49,7 +49,7 @@
 								<div class="panel-body">
 									<div>
 									<label><input type="checkbox" onclick="return swapCheck()">全选</label>
-									<button class="pull-right" onclick="return ToAble()">-></button>
+<!--									<button class="pull-right" onclick="return ToAble()">-></button>-->
 									</div>
 									<div class="table-responsive">
 										<table class="table table-bordered">											
@@ -93,7 +93,7 @@
 								</div>
 								<div class="panel-body">
 									<div class="row">
-									<button class="pull-left"><-</button>
+<!--									<button class="pull-left"><-</button>-->
 									</div>
 									<div class="table-responsive">
 										<table class="table table-bordered">											
@@ -135,6 +135,17 @@
       		</div>
     	</div>
 		<script type="text/javascript">
+			
+			//自动加载
+			$(function(){
+				if({{.y}}!=""){
+					$("#s_Pmyear").val({{.y}})
+				}
+				if({{.f}}!=""){
+					$("#s_Pmfaculty").val({{.f}})
+				}													
+				//alert("自动加载")			
+			})
 			
 			function QueryInput(){
 				var s_Pmyear=document.getElementById("s_Pmyear")

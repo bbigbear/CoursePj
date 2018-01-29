@@ -71,37 +71,37 @@
 							<div class="form-group">				
 								<label class="col-sm-2 control-label">学分</label>			
 								<div class="col-sm-10">
-								<input class="form-control" name="Credit">
+								<input class="form-control" name="Credit" type="number">
 								</div>
 							</div>
 							<div class="form-group">				
 								<label class="col-sm-2 control-label">授课学时</label>			
 								<div class="col-sm-10">
-								<input class="form-control" name="Tteach">
+								<input class="form-control" name="Tteach"  type="number">
 								</div>
 							</div>
 							<div class="form-group">				
 								<label class="col-sm-2 control-label">实验学时</label>			
 								<div class="col-sm-10">
-								<input class="form-control" name="Texperiment">
+								<input class="form-control" name="Texperiment"  type="number">
 								</div>
 							</div>
 							<div class="form-group">				
 								<label class="col-sm-2 control-label">上机学时</label>			
 								<div class="col-sm-10">
-								<input class="form-control" name="Tcomputer">
+								<input class="form-control" name="Tcomputer"  type="number">
 								</div>
 							</div>
 							<div class="form-group">				
 								<label class="col-sm-2 control-label">其他学时</label>			
 								<div class="col-sm-10">
-								<input class="form-control" name="Tother">
+								<input class="form-control" name="Tother"  type="number">
 								</div>
 							</div>
 							<div class="form-group">				
 								<label class="col-sm-2 control-label">总学时</label>			
 								<div class="col-sm-10">
-								<input class="form-control" name="Ttotal">
+								<input class="form-control" name="Ttotal"  type="number">
 								</div>
 							</div>
 							<div class="form-group">				

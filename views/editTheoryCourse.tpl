@@ -57,43 +57,47 @@
 							<div class="form-group">				
 								<label class="col-sm-2 control-label">状态</label>			
 								<div class="col-sm-10">
-								<input class="form-control" name="Status" value="{{.Status}}">
+								<select class="form-control" name="Status" id="Status" value="{{.Status}}">
+								<option>可用</option>
+								<option>停用</option>
+								</select>
+<!--								<input class="form-control" name="Status" value="{{.Status}}">-->
 								</div>
 							</div>
 							<div class="form-group">				
 								<label class="col-sm-2 control-label">学分</label>			
 								<div class="col-sm-10">
-								<input class="form-control" name="Credit" value="{{.Credit}}">
+								<input class="form-control" name="Credit" value="{{.Credit}}" type="number">
 								</div>
 							</div>
 							<div class="form-group">				
 								<label class="col-sm-2 control-label">授课学时</label>			
 								<div class="col-sm-10">
-								<input class="form-control" name="Tteach" value="{{.Tteach}}">
+								<input class="form-control" name="Tteach" value="{{.Tteach}}" type="number">
 								</div>
 							</div>
 							<div class="form-group">				
 								<label class="col-sm-2 control-label">实验学时</label>			
 								<div class="col-sm-10">
-								<input class="form-control" name="Texperiment" value="{{.Texperiment}}">
+								<input class="form-control" name="Texperiment" value="{{.Texperiment}}" type="number">
 								</div>
 							</div>
 							<div class="form-group">				
 								<label class="col-sm-2 control-label">上机学时</label>			
 								<div class="col-sm-10">
-								<input class="form-control" name="Tcomputer" value="{{.Tcomputer}}">
+								<input class="form-control" name="Tcomputer" value="{{.Tcomputer}}" type="number">
 								</div>
 							</div>
 							<div class="form-group">				
 								<label class="col-sm-2 control-label">其他学时</label>			
 								<div class="col-sm-10">
-								<input class="form-control" name="Tother" value="{{.Tother}}">
+								<input class="form-control" name="Tother" value="{{.Tother}}" type="number">
 								</div>
 							</div>
 							<div class="form-group">				
 								<label class="col-sm-2 control-label">总学时</label>			
 								<div class="col-sm-10">
-								<input class="form-control" name="Ttotal" value="{{.Ttotal}}">
+								<input class="form-control" name="Ttotal" value="{{.Ttotal}}" type="number">
 								</div>
 							</div>
 							<div class="form-group">				
@@ -105,7 +109,13 @@
 							<div class="form-group">				
 								<label class="col-sm-2 control-label">年级</label>			
 								<div class="col-sm-10">
-								<input class="form-control" name="Year" value="{{.Year}}" id="year">
+								<select class="form-control" name="Year" id="year" value="{{.Year}}">
+								<option>2015</option>
+								<option>2016</option>
+								<option>2017</option>
+								<option>2018</option>
+								</select>
+<!--								<input class="form-control" name="Year" value="{{.Year}}" id="year">-->
 								</div>
 							</div>
 							<div class="form-group">							
@@ -121,6 +131,17 @@
 			</div>			
 		</div>
 		<script type="text/javascript">
+			//自动加载
+			$(function(){
+				if({{.y}}!=""){
+					$("#year").val({{.y}})
+				}
+				if({{.s}}!=""){
+					$("#Status").val({{.s}})
+				}													
+				//alert("自动加载")			
+			})
+			
 			function UpdataInput(){
 				$.ajax({
 					type:"POST",

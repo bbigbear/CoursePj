@@ -81,13 +81,15 @@ func (this *PracticeController) PracticeSearch() {
 		filters = append(filters, "Pcg1", Pcg1)
 	}
 	Status := this.Input().Get("s_Status")
-	if Pname != "" {
+	if Status != "" {
 		filters = append(filters, "Status", Status)
 	}
+	this.Data["s"] = Status
 	Year := this.Input().Get("s_Year")
 	if Year != "" {
 		filters = append(filters, "Year", Year)
 	}
+	this.Data["y"] = Year
 
 	fmt.Println(Punit)
 	fmt.Println(len(Pname))
@@ -132,6 +134,8 @@ func (this *PracticeController) PracticeEdit() {
 		this.Data["m"] = maps
 		for _, m := range maps {
 			fmt.Println(m["Pid"])
+			this.Data["y"] = year
+			this.Data["s"] = m["Status"]
 		}
 	}
 	this.TplName = "editPractice.tpl"

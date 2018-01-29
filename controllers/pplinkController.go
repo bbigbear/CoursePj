@@ -4,7 +4,6 @@ import (
 	"CoursePj/models"
 	"fmt"
 	"regexp"
-	"strconv"
 	"strings"
 
 	_ "github.com/GO-SQL-Driver/MySQL"
@@ -124,14 +123,16 @@ func (this *PPLinkController) Setcourse() {
 
 			var pplink models.Pplink
 			pp := new(models.Pplink)
-			ci, err := strconv.ParseInt(pidlist[i], 10, 64)
-			if err == nil {
-				pplink.Pid = ci
-			}
-			pmi, err := strconv.ParseInt(pmidlist[j], 10, 64)
-			if err == nil {
-				pplink.Pmid = pmi
-			}
+			//ci, err := strconv.ParseInt(pidlist[i], 10, 64)
+			//if err == nil {
+			ci := pidlist[i]
+			pplink.Pid = ci
+			//}
+			//pmi, err := strconv.ParseInt(pmidlist[j], 10, 64)
+			pmi := pmidlist[j]
+			//if err == nil {
+			pplink.Pmid = pmi
+			//}
 			//先查询再建立
 			num, err := o.QueryTable(pp).Filter("Pid", ci).Filter("Pmid", pmi).Count()
 			if err != nil {

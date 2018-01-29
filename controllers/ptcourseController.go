@@ -4,7 +4,6 @@ import (
 	"CoursePj/models"
 	"fmt"
 	"regexp"
-	"strconv"
 	"strings"
 
 	_ "github.com/GO-SQL-Driver/MySQL"
@@ -125,14 +124,16 @@ func (this *PTCourseController) Setcourse() {
 
 			var ptcourse models.Ptcourse
 			pt := new(models.Ptcourse)
-			ci, err := strconv.ParseInt(cidlist[i], 10, 64)
-			if err == nil {
-				ptcourse.Cid = ci
-			}
-			pmi, err := strconv.ParseInt(pmidlist[j], 10, 64)
-			if err == nil {
-				ptcourse.Pmid = pmi
-			}
+			//ci, err := strconv.ParseInt(cidlist[i], 10, 64)
+			ci := cidlist[i]
+			//if err == nil {
+			ptcourse.Cid = ci
+			//}
+			//pmi, err := strconv.ParseInt(pmidlist[j], 10, 64)
+			pmi := pmidlist[j]
+			//if err == nil {
+			ptcourse.Pmid = pmi
+			//}
 			//先查询再建立
 			num, err := o.QueryTable(pt).Filter("Cid", ci).Filter("Pmid", pmi).Count()
 			if err != nil {
