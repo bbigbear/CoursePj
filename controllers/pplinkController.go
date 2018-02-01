@@ -114,7 +114,9 @@ func (this *PPLinkController) Setcourse() {
 	fmt.Println(pmid)
 	fmt.Println(pidlist)
 	fmt.Println(pmidlist)
-
+	if pid == "" || pmid == "" {
+		this.ajaxMsg("pid,pmid不能为空", MSG_ERR_Param)
+	}
 	o := orm.NewOrm()
 	pid_count := len(pidlist) - 1
 	pmid_count := len(pmidlist)
@@ -133,28 +135,29 @@ func (this *PPLinkController) Setcourse() {
 			//if err == nil {
 			pplink.Pmid = pmi
 			//}
+
 			//先查询再建立
 			num, err := o.QueryTable(pp).Filter("Pid", ci).Filter("Pmid", pmi).Count()
 			if err != nil {
-				this.ajaxMsg("", MSG_ERR)
+				this.ajaxMsg("设置失败", MSG_ERR_Resources)
 				fmt.Println("查询失败")
 			}
 			fmt.Println("query num:", num)
 			if num == 0 {
 				id, err := o.Insert(&pplink)
 				if err != nil {
-					this.ajaxMsg("", MSG_ERR)
+					this.ajaxMsg("设置失败", MSG_ERR_Resources)
 					fmt.Println("插入失败")
 				}
 				fmt.Println(id)
 			} else {
-				this.ajaxMsg("", MSG_ERR)
+				this.ajaxMsg("设置失败，已存在相关实践环节", MSG_ERR_Resources)
 			}
 
 		}
 	}
 	fmt.Println("插入成功")
-	this.ajaxMsg("", MSG_OK)
+	this.ajaxMsg("设置成功", MSG_OK)
 	return
 
 }
@@ -212,6 +215,9 @@ func (this *PPLinkController) PPLinkDelete() {
 	fmt.Println("pmid:", pmid)
 	year := this.Input().Get("year")
 
+	if pname == "" || pmid == "" || year == "" {
+		this.ajaxMsg("pname,pmid,year 参数不能为空", MSG_ERR_Param)
+	}
 	//取其中的pmid
 	reg := regexp.MustCompile(`[[:digit:]]+`)
 	pmidlist := reg.FindAllString(pmid, -1)
@@ -228,11 +234,16 @@ func (this *PPLinkController) PPLinkDelete() {
 			if err == nil {
 				fmt.Printf("删除成功")
 				fmt.Printf("Result delPid Nums: %d\n", num)
+				if num == 0 {
+					this.ajaxMsg("删除失败", MSG_ERR_Resources)
+				}
 			}
+		} else {
+			this.ajaxMsg("删除失败", MSG_ERR_Resources)
 		}
 	}
 
-	this.ajaxMsg("", MSG_OK)
+	this.ajaxMsg("删除成功", MSG_OK)
 	return
 
 }

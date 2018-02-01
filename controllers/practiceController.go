@@ -3,7 +3,6 @@ package controllers
 import (
 	"CoursePj/models"
 	"fmt"
-	"strings"
 
 	_ "github.com/GO-SQL-Driver/MySQL"
 	"github.com/astaxie/beego/orm"
@@ -41,25 +40,31 @@ func (this *PracticeController) PracticeAddAction() {
 
 	if err := this.ParseForm(&practice); err != nil {
 		fmt.Println("获取表单数据失败")
+		this.ajaxMsg("获取表单数据失败", MSG_ERR_Param)
 	}
 	fmt.Println("获取表单数据成功")
 	o := orm.NewOrm()
 	pid := practice.Pid
 	year := practice.Year
 	fmt.Println("获取pid_info", year, pid)
-
+	if year == 0 || pid == "" {
+		this.ajaxMsg("year，pid不能为空", MSG_ERR_Param)
+	}
 	exist := o.QueryTable(p).Filter("Pid", pid).Filter("Year", year).Exist()
 	if exist {
 		fmt.Println("插入失败,存在相同项")
-		this.ajaxMsg("", MSG_ERR)
+		this.ajaxMsg("新增失败,存在相同项", MSG_ERR_Resources)
 	} else {
 		if _, err := o.Insert(&practice); err != nil {
 			fmt.Println("插入失败")
-			this.ajaxMsg("", MSG_ERR)
+			this.ajaxMsg("新增失败", MSG_ERR_Resources)
 		}
 	}
 
-	this.ajaxMsg("", MSG_OK)
+	list := make(map[string]interface{})
+	list["id"] = practice.Id
+	this.ajaxList("新增成功", MSG_OK, 1, list)
+	//this.ajaxMsg("新增成功", MSG_OK)
 	return
 }
 
@@ -149,13 +154,21 @@ func (this *PracticeController) PracticeUpdata() {
 
 	if err := this.ParseForm(&practice); err != nil {
 		fmt.Println("获取表单数据失败")
+		this.ajaxMsg("获取表单数据失败", MSG_ERR_Param)
 	}
-
-	if _, err := orm.NewOrm().Update(&practice); err != nil {
+	id := practice.Id
+	if id == 0 {
+		this.ajaxMsg("id 不能为空", MSG_ERR_Param)
+	}
+	num, err := orm.NewOrm().Update(&practice)
+	if err != nil {
 		fmt.Println("更新失败")
-		this.ajaxMsg("", MSG_ERR)
+		this.ajaxMsg("更新失败", MSG_ERR_Resources)
 	}
-	this.ajaxMsg("", MSG_OK)
+	if num == 0 {
+		this.ajaxMsg("更新失败", MSG_ERR_Resources)
+	}
+	this.ajaxMsg("更新成功", MSG_OK)
 	return
 }
 
@@ -164,15 +177,27 @@ func (this *PracticeController) PracticeDelete() {
 	fmt.Println("删除")
 	o := orm.NewOrm()
 	practice := new(models.Practice)
-	pid := strings.TrimSpace(this.GetString("pid"))
+	pid := this.Input().Get("pid")
+	//var p models.Practice
+	//json.Unmarshal(this.Ctx.Input.RequestBody, &p)
+	//pid := p.Pid
 	fmt.Println(pid)
 	year := this.Input().Get("year")
+	//year := p.Year
 	fmt.Println(year)
+	if year == "" || pid == "" {
+		this.ajaxMsg("pid,year不能为空", MSG_ERR_Param)
+	}
 	num, err := o.QueryTable(practice).Filter("Pid", pid).Filter("Year", year).Delete()
 	if err == nil {
 		fmt.Printf("删除成功")
 		fmt.Printf("Result Nums: %d\n", num)
+		if num == 0 {
+			this.ajaxMsg("删除失败,找不到对应的环节", MSG_ERR_Resources)
+		}
+	} else {
+		this.ajaxMsg("删除失败", MSG_ERR_Resources)
 	}
-	this.ajaxMsg("", MSG_OK)
+	this.ajaxMsg("删除成功", MSG_OK)
 	return
 }

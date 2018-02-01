@@ -3,7 +3,6 @@ package controllers
 import (
 	"CoursePj/models"
 	"fmt"
-	"strings"
 
 	_ "github.com/GO-SQL-Driver/MySQL"
 	"github.com/astaxie/beego/orm"
@@ -40,25 +39,31 @@ func (this *HomeController) TheoryCourseAddAction() {
 	theoryCourse := models.TheoryCourse{}
 	if err := this.ParseForm(&theoryCourse); err != nil {
 		fmt.Println("获取表单数据失败")
+		this.ajaxMsg("获取表单数据失败", MSG_ERR_Param)
 	}
 	//获取year和cid
 	year := theoryCourse.Year
 	cid := theoryCourse.Cid
 	fmt.Println("获取cid_info", year, cid)
 	fmt.Println("获取表单数据成功")
+	if year == 0 || cid == "" {
+		this.ajaxMsg("year，cid不能为空", MSG_ERR_Param)
+	}
 	o := orm.NewOrm()
 	exist := o.QueryTable(tc).Filter("Cid", cid).Filter("Year", year).Exist()
 	if exist {
 		fmt.Println("插入失败,存在相同项")
-		this.ajaxMsg("", MSG_ERR)
+		this.ajaxMsg("插入失败,存在相同项", MSG_ERR_Resources)
 	} else {
 		if _, err := o.Insert(&theoryCourse); err != nil {
 			fmt.Println("插入失败")
-			this.ajaxMsg("", MSG_ERR)
+			this.ajaxMsg("新增失败", MSG_ERR_Resources)
 		}
 	}
-
-	this.ajaxMsg("", MSG_OK)
+	list := make(map[string]interface{})
+	list["id"] = theoryCourse.Id
+	this.ajaxList("新增成功", MSG_OK, 1, list)
+	//this.ajaxMsg("新增成功", MSG_OK)
 	return
 }
 
@@ -148,16 +153,23 @@ func (this *HomeController) TheoryCourseEdit() {
 func (this *HomeController) TheoryCourseUpdata() {
 	fmt.Println("更新")
 	theoryCourse := models.TheoryCourse{}
-
 	if err := this.ParseForm(&theoryCourse); err != nil {
 		fmt.Println("获取表单数据失败")
+		this.ajaxMsg("获取表单数据失败", MSG_ERR_Param)
 	}
-
-	if _, err := orm.NewOrm().Update(&theoryCourse); err != nil {
+	id := theoryCourse.Id
+	if id == 0 {
+		this.ajaxMsg("id 不能为空", MSG_ERR_Param)
+	}
+	num, err := orm.NewOrm().Update(&theoryCourse)
+	if err != nil {
 		fmt.Println("更新失败")
-		this.ajaxMsg("", MSG_ERR)
+		this.ajaxMsg("更新失败", MSG_ERR_Resources)
 	}
-	this.ajaxMsg("", MSG_OK)
+	if num == 0 {
+		this.ajaxMsg("更新失败", MSG_ERR_Resources)
+	}
+	this.ajaxMsg("更新成功", MSG_OK)
 	return
 }
 
@@ -166,15 +178,29 @@ func (this *HomeController) TheoryCourseDelete() {
 	fmt.Println("删除")
 	o := orm.NewOrm()
 	theoryCourse := new(models.TheoryCourse)
-	cid := strings.TrimSpace(this.GetString("cid"))
+	cid := this.Input().Get("cid")
+	//var tc models.TheoryCourse
+	//json.Unmarshal(this.Ctx.Input.RequestBody, &tc)
+	//fmt.Println("cid",tc.Cid)
+	//cid := this.GetString("cid")
+	//cid := tc.Cid
 	fmt.Println(cid)
 	year := this.Input().Get("year")
+	//year := tc.Year
 	fmt.Println(year)
+	if year == "" || cid == "" {
+		this.ajaxMsg("cid，year不能为空", MSG_ERR_Param)
+	}
 	num, err := o.QueryTable(theoryCourse).Filter("Cid", cid).Filter("Year", year).Delete()
 	if err == nil {
 		fmt.Printf("删除成功")
 		fmt.Printf("Result Nums: %d\n", num)
+		if num == 0 {
+			this.ajaxMsg("删除失败", MSG_ERR_Resources)
+		}
+	} else {
+		this.ajaxMsg("删除失败", MSG_ERR_Resources)
 	}
-	this.ajaxMsg("", MSG_OK)
+	this.ajaxMsg("删除成功", MSG_OK)
 	return
 }

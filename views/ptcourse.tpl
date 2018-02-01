@@ -175,7 +175,7 @@
 				//alert($("[name='Cid']:checked").length)
 				if($("[name='Cid']:checked").length>0&&$("#Pmid").val()!=null){
 					$.ajax({  
-					    url: "{{urlfor "PTCourseController.Setcourse"}}",  
+					    url: "/ptcourse/setcourse",  
 					    data: { cid: data,pmid: Pm_data},    
 					    type: "POST",
 						async:false,
@@ -183,7 +183,7 @@
 							alert("post error")
 						},
 					    success:function(data){  
-					        if(data.status==0){
+					        if(data.status==200){
 								alert("设置成功")
 							}else{
 								alert("设置失败，已存在相关理论课程")

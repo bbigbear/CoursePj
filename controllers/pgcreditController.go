@@ -181,6 +181,9 @@ func (this *PGCreditController) PgcSave() {
 	}
 	fmt.Println("pgc_info:", pmname, ggbx, ggrx, zybx, zyrx, zyxx, sjxf, zxf)
 
+	if pmname == "" || faculty == "" || year == 0 {
+		this.ajaxMsg("pmname,faculty,year不能为空", MSG_ERR_Param)
+	}
 	o := orm.NewOrm()
 	pm := new(models.Pm)
 	pgc := new(models.Pgcredits)
@@ -204,10 +207,12 @@ func (this *PGCreditController) PgcSave() {
 		num, err := o.Insert(pgc)
 		if err != nil {
 			fmt.Println("插入失败")
-			this.ajaxMsg("", MSG_ERR)
+			this.ajaxMsg("保存失败", MSG_ERR_Resources)
 		}
 		fmt.Println("成功插入num:", num)
-		this.ajaxMsg("", MSG_OK)
+		list := make(map[string]interface{})
+		list["id"] = pgc.Id
+		this.ajaxList("保存成功", MSG_OK, 1, list)
 		return
 	}
 }
@@ -253,6 +258,9 @@ func (this *PGCreditController) PgcUpdate() {
 	if err != nil {
 		fmt.Println("zxf error!")
 	}
+	if year == 0 || faculty == "" || pmname == "" || id == 0 {
+		this.ajaxMsg("year,faculty,pmname,id参数不能为空", MSG_ERR_Param)
+	}
 	fmt.Println("pgc_info:", year, faculty, pmname, id, ggbx, ggrx, zybx, zyrx, zyxx, sjxf, zxf)
 
 	o := orm.NewOrm()
@@ -276,13 +284,17 @@ func (this *PGCreditController) PgcUpdate() {
 		pgc.Practice_credit = sjxf
 		pgc.Total_credit = zxf
 
-		if _, err := o.Update(pgc); err != nil {
+		num, err := o.Update(pgc)
+		if err != nil {
 			fmt.Println("插入失败")
-			this.ajaxMsg("", MSG_ERR)
+			this.ajaxMsg("更新失败", MSG_ERR_Resources)
+		}
+		if num == 0 {
+			this.ajaxMsg("更新失败,查不到相关专业学分", MSG_ERR_Resources)
 		}
 	}
 
-	this.ajaxMsg("", MSG_OK)
+	this.ajaxMsg("更新成功", MSG_OK)
 	return
 
 }
@@ -291,18 +303,30 @@ func (this *PGCreditController) PgcUpdate() {
 func (this *PGCreditController) PgcDel() {
 	fmt.Println("删除")
 	id := this.Input().Get("id")
+	if id == "" {
+		this.ajaxMsg("id 参数不能为空", MSG_ERR_Param)
+	}
 	o := orm.NewOrm()
 	//pm := new(models.Pm)
 	pgc := new(models.Pgcredits)
 	//var pm_info models.Pm
 	//err := o.QueryTable(pm).Filter("id", id).One(&pm_info)
 	//if err == nil {
+	if id == "" {
+		this.ajaxMsg("id不能为空", MSG_ERR_Param)
+	}
 	num, err := o.QueryTable(pgc).Filter("id", id).Delete()
 	if err == nil {
-		fmt.Println("num:", num)
+		fmt.Printf("删除成功")
+		fmt.Printf("Result del Nums: %d\n", num)
+		if num == 0 {
+			this.ajaxMsg("删除失败,找不到相关专业学分", MSG_ERR_Resources)
+		}
+	} else {
+		this.ajaxMsg("删除失败", MSG_ERR_Resources)
 	}
 	//}
-	this.ajaxMsg("", MSG_OK)
+	this.ajaxMsg("删除成功", MSG_OK)
 	return
 }
 

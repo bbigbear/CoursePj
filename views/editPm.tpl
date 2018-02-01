@@ -104,18 +104,18 @@
 			function UpdataInput(){
 				$.ajax({
 					type:"POST",
-					url:"{{urlfor "PmController.PmUpdata"}}",
+					url:"/pm/updata",
 					data:$("#editPm").serialize(),
 					async:false,
 					error:function(request){
 						alert("post error")				
 					},
 					success:function(data){
-						if(data.status==0){
-							alert("更新成功")
+						if(data.status==200){
+							alert(data.message)
 							window.location.href="/pm"
 						}else{
-							alert("更新失败")
+							alert(data.message)
 						}
 						
 					}
@@ -128,18 +128,20 @@
 				var year=document.getElementById("year")
 				$.ajax({
 					type:"POST",
-					url:"{{urlfor "PmController.PmDelete"}}",
+					//contentType:"application/json;charset=utf-8",
+					url:"/pm/delete",
 					data:{pmid:pmid.value,year:year.value},
+					//data:JSON.stringify({'pmid':pmid.value,'year':parseInt(year.value)}),
 					async:false,
 					error:function(request){
 						alert("post error")				
 					},
 					success:function(data){
-						if(data.status==0){
-							alert("删除成功")
+						if(data.status==200){
+							alert(data.message)
 							window.location.href="/pm"
 						}else{
-							alert("删除失败")
+							alert(data.message)
 						}
 						
 					}

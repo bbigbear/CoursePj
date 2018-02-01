@@ -145,18 +145,18 @@
 			function UpdataInput(){
 				$.ajax({
 					type:"POST",
-					url:"{{urlfor "HomeController.TheoryCourseUpdata"}}",
+					url:"/home/updata",
 					data:$("#editCourse").serialize(),
 					async:false,
 					error:function(request){
 						alert("post error")				
 					},
 					success:function(data){
-						if(data.status==0){
-							alert("更新成功")
+						if(data.status==200){
+							alert(data.message)
 							window.location.href="/home"
 						}else{
-							alert("更新失败")
+							alert(data.message)
 						}
 						
 					}
@@ -169,18 +169,20 @@
 				var year=document.getElementById("year")
 				$.ajax({
 					type:"POST",
-					url:"{{urlfor "HomeController.TheoryCourseDelete"}}",
+					//contentType:"application/json;charset=utf-8",
+					url:"/home/delete",
 					data:{cid:cid.value,year:year.value},
-					async:false,
+					//data:JSON.stringify({'cid':cid.value,'year':parseInt(year.value)}),
+					async:false,					
 					error:function(request){
 						alert("post error")				
 					},
 					success:function(data){
-						if(data.status==0){
-							alert("删除成功")
+						if(data.status==200){
+							alert(data.message)
 							window.location.href="/home"
 						}else{
-							alert("删除失败")
+							alert(data.message)
 						}
 						
 					}

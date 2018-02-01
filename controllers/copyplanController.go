@@ -142,7 +142,9 @@ func (this *CopyPlanController) PPCopy() {
 		fmt.Println("year error!")
 	}
 	fmt.Println("copy year:", year)
-
+	if pmname == "" || faculty == "" || year == 0 {
+		this.ajaxMsg("year,faculty,pmname参数不能为空", MSG_ERR_Param)
+	}
 	plan := new(models.Plan)
 	pm := new(models.Pm)
 	var pm_info models.Pm
@@ -152,7 +154,7 @@ func (this *CopyPlanController) PPCopy() {
 	exist := o.QueryTable(plan).Filter("Plname", pmname).Filter("Year", year).Filter("Faculty", faculty).Exist()
 	if exist {
 		fmt.Println("已存在")
-		this.ajaxMsg("", MSG_ERR)
+		this.ajaxMsg("复制失败，已存在专业", MSG_ERR_Resources)
 	} else {
 		err1 := o.QueryTable(pm).Filter("Pmname", pmname).Filter("Year", year).Filter("Faculty", faculty).One(&pm_info)
 		if err1 == nil {
@@ -163,15 +165,17 @@ func (this *CopyPlanController) PPCopy() {
 			num, err := o.Insert(plan)
 			if err != nil {
 				fmt.Println("插入plan失败")
-				this.ajaxMsg("", MSG_ERR)
+				this.ajaxMsg("复制失败", MSG_ERR_Resources)
+			}
+			if num == 0 {
+				this.ajaxMsg("复制失败", MSG_ERR_Resources)
 			}
 			fmt.Println("成功插入num:", num)
-			this.ajaxMsg("", MSG_OK)
 
 		}
 
 	}
-
+	this.ajaxMsg("复制成功", MSG_OK)
 	return
 
 }
@@ -186,6 +190,9 @@ func (this *CopyPlanController) PPRemove() {
 	if err != nil {
 		fmt.Println("year error!")
 	}
+	if pmname == "" || faculty == "" || year == 0 {
+		this.ajaxMsg("year,faculty,pmname参数不能为空", MSG_ERR_Param)
+	}
 	plan := new(models.Plan)
 	pm := new(models.Pm)
 	var pm_info models.Pm
@@ -197,11 +204,16 @@ func (this *CopyPlanController) PPRemove() {
 		if err == nil {
 			fmt.Printf("删除成功")
 			fmt.Printf("Result Nums: %d\n", num)
+			if num == 0 {
+				this.ajaxMsg("删除失败", MSG_ERR_Resources)
+			}
+		} else {
+			this.ajaxMsg("删除失败", MSG_ERR_Resources)
 		}
-		this.ajaxMsg("", MSG_OK)
-		return
 
 	}
+	this.ajaxMsg("删除成功", MSG_OK)
+	return
 
 }
 
@@ -298,7 +310,9 @@ func (this *CopyPlanController) GYCopy() {
 		fmt.Println("year error!")
 	}
 	fmt.Println("copy year:", year, right_year)
-
+	if plname == "" || faculty == "" || right_year == 0 || year == 0 {
+		this.ajaxMsg("year,faculty,plname,right_year参数不能为空", MSG_ERR_Param)
+	}
 	plan := new(models.Plan)
 	pm := new(models.Pm)
 	tc := new(models.TheoryCourse)
@@ -316,7 +330,7 @@ func (this *CopyPlanController) GYCopy() {
 	exist := o.QueryTable(plan).Filter("Plname", plname).Filter("Faculty", faculty).Filter("Year", right_year).Exist()
 	if exist {
 		fmt.Println("已存在")
-		this.ajaxMsg("", MSG_ERR)
+		this.ajaxMsg("复制失败，已存在专业", MSG_ERR_Resources)
 	} else {
 		err1 := o.QueryTable(pm).Filter("Pmname", plname).Filter("Faculty", faculty).Filter("Year", year).One(&pm_info)
 		if err1 == nil {
@@ -328,7 +342,10 @@ func (this *CopyPlanController) GYCopy() {
 			num, err := o.Insert(plan)
 			if err != nil {
 				fmt.Println("插入失败")
-				this.ajaxMsg("", MSG_ERR)
+				this.ajaxMsg("复制失败", MSG_ERR_Resources)
+			}
+			if num == 0 {
+				this.ajaxMsg("复制失败", MSG_ERR_Resources)
 			}
 			fmt.Println("成功插入num:", num)
 			//插入pm数据库
@@ -341,7 +358,7 @@ func (this *CopyPlanController) GYCopy() {
 			pm_num, err := o.Insert(&pm_info)
 			if err != nil {
 				fmt.Println("插入pm失败")
-				this.ajaxMsg("", MSG_ERR)
+				this.ajaxMsg("复制失败", MSG_ERR_Resources)
 			}
 			fmt.Println("成功插入pm_num:", pm_num)
 
@@ -355,7 +372,7 @@ func (this *CopyPlanController) GYCopy() {
 					tc_num, err := o.Insert(&tc_info)
 					if err != nil {
 						fmt.Println("插入tc失败")
-						this.ajaxMsg("", MSG_ERR)
+						this.ajaxMsg("复制失败", MSG_ERR_Resources)
 					}
 					fmt.Println("成功插入tc_num:", tc_num)
 				}
@@ -370,16 +387,16 @@ func (this *CopyPlanController) GYCopy() {
 					p_num, err := o.Insert(&p_info)
 					if err != nil {
 						fmt.Println("插入p失败")
-						this.ajaxMsg("", MSG_ERR)
+						this.ajaxMsg("复制失败", MSG_ERR_Resources)
 					}
 					fmt.Println("成功插入p_num:", p_num)
 				}
 			}
-			this.ajaxMsg("", MSG_OK)
 
 		}
 
 	}
+	this.ajaxMsg("复制成功", MSG_OK)
 	return
 
 }
@@ -394,16 +411,21 @@ func (this *CopyPlanController) GYRemove() {
 	if err != nil {
 		fmt.Println("year error!")
 	}
-
+	if pmname == "" || faculty == "" || year == 0 {
+		this.ajaxMsg("year,faculty,pmname参数不能为空", MSG_ERR_Param)
+	}
 	plan := new(models.Plan)
 	o := orm.NewOrm()
 	num, err := o.QueryTable(plan).Filter("Plname", pmname).Filter("Year", year).Filter("Faculty", faculty).Delete()
 	if err == nil {
 		fmt.Printf("删除成功")
 		fmt.Printf("Result Nums: %d\n", num)
+		if num == 0 {
+			this.ajaxMsg("删除失败", MSG_ERR_Resources)
+		}
 	} else {
-		this.ajaxMsg("", MSG_ERR)
+		this.ajaxMsg("删除失败", MSG_ERR_Resources)
 	}
-	this.ajaxMsg("", MSG_OK)
+	this.ajaxMsg("删除成功", MSG_OK)
 
 }

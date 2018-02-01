@@ -50,14 +50,14 @@
 				if($("#Cname").val()!=null){
 					$.ajax({
 						type:"POST",
-						url:"{{urlfor "PTCourseController.PTCourseDelete"}}",
+						url:"/ptcourse/delete",
 						data:{cname:data,pmid:{{.pmid}},year:{{.y}}},
 						async:false,
 						error:function(request){
 							alert("post error")		
 						},
 						success:function(data){
-							if(data.status==0){
+							if(data.status==200){
 								alert("删除成功")
 								window.location.href="/ptcourse/edit?pmid="+{{.pmid}}+"&year="+{{.y}}
 							}else{

@@ -5,8 +5,12 @@ import (
 )
 
 const (
-	MSG_OK  = 0
-	MSG_ERR = -1
+	MSG_OK            = 200
+	MSG_ERR_Param     = 400
+	MSG_ERR_Verified  = 401
+	MSG_ERR_Authority = 403
+	MSG_ERR_Resources = 404
+	MSG_ERR           = 500
 )
 
 type BaseController struct {
@@ -18,6 +22,18 @@ func (this *BaseController) ajaxMsg(msg interface{}, msgno int) {
 	out := make(map[string]interface{})
 	out["status"] = msgno
 	out["message"] = msg
+	this.Data["json"] = out
+	this.ServeJSON()
+	this.StopRun()
+}
+
+//ajax返回 列表
+func (this *BaseController) ajaxList(msg interface{}, msgno int, count int64, data interface{}) {
+	out := make(map[string]interface{})
+	out["code"] = msgno
+	out["message"] = msg
+	out["count"] = count
+	out["data"] = data
 	this.Data["json"] = out
 	this.ServeJSON()
 	this.StopRun()

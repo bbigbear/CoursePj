@@ -3,7 +3,6 @@ package controllers
 import (
 	"CoursePj/models"
 	"fmt"
-	"strings"
 
 	_ "github.com/GO-SQL-Driver/MySQL"
 	"github.com/astaxie/beego/orm"
@@ -63,24 +62,31 @@ func (this *PmController) PmAddAction() {
 
 	if err := this.ParseForm(&pm); err != nil {
 		fmt.Println("获取表单数据失败")
+		this.ajaxMsg("获取表单数据失败", MSG_ERR_Param)
 	}
 	//获取year和Pmid
 	year := pm.Year
 	pmid := pm.Pmid
 	fmt.Println("获取pmid_info", year, pmid)
+	if year == 0 || pmid == "" {
+		this.ajaxMsg("year，pmid不能为空", MSG_ERR_Param)
+	}
 	fmt.Println("获取表单数据成功")
 	o := orm.NewOrm()
 	exist := o.QueryTable(m).Filter("Pmid", pmid).Filter("Year", year).Exist()
 	if exist {
 		fmt.Println("插入失败,已存在该专业")
-		this.ajaxMsg("", MSG_ERR)
+		this.ajaxMsg("插入失败,已存在该专业", MSG_ERR_Resources)
 	} else {
 		if _, err := o.Insert(&pm); err != nil {
 			fmt.Println("插入失败")
-			this.ajaxMsg("", MSG_ERR)
+			this.ajaxMsg("新增失败", MSG_ERR_Resources)
 		}
 	}
-	this.ajaxMsg("", MSG_OK)
+	list := make(map[string]interface{})
+	list["id"] = pm.Id
+	this.ajaxList("新增成功", MSG_OK, 1, list)
+	//this.ajaxMsg("新增成功", MSG_OK)
 	return
 }
 
@@ -190,13 +196,21 @@ func (this *PmController) PmUpdata() {
 
 	if err := this.ParseForm(&pm); err != nil {
 		fmt.Println("获取表单数据失败")
+		this.ajaxMsg("获取表单数据失败", MSG_ERR_Param)
 	}
-
-	if _, err := orm.NewOrm().Update(&pm); err != nil {
+	id := pm.Id
+	if id == 0 {
+		this.ajaxMsg("id 不能为空", MSG_ERR_Param)
+	}
+	num, err := orm.NewOrm().Update(&pm)
+	if err != nil {
 		fmt.Println("更新失败")
-		this.ajaxMsg("", MSG_ERR)
+		this.ajaxMsg("更新失败", MSG_ERR_Resources)
 	}
-	this.ajaxMsg("", MSG_OK)
+	if num == 0 {
+		this.ajaxMsg("更新失败", MSG_ERR_Resources)
+	}
+	this.ajaxMsg("更新成功", MSG_OK)
 	return
 }
 
@@ -205,16 +219,28 @@ func (this *PmController) PmDelete() {
 	fmt.Println("删除")
 	o := orm.NewOrm()
 	pm := new(models.Pm)
-	pmid := strings.TrimSpace(this.GetString("pmid"))
+	pmid := this.Input().Get("pmid")
+	//var pm_info models.Pm
+	//json.Unmarshal(this.Ctx.Input.RequestBody, &pm_info)
+	//pmid := pm_info.Pmid
 	fmt.Println(pmid)
 	year := this.Input().Get("year")
+	//year := pm_info.Year
 	fmt.Println(year)
+	if year == "" || pmid == "" {
+		this.ajaxMsg("pmid,year不能为空", MSG_ERR_Param)
+	}
 	num, err := o.QueryTable(pm).Filter("Pmid", pmid).Filter("Year", year).Delete()
 	if err == nil {
 		fmt.Printf("删除成功")
 		fmt.Printf("Result Nums: %d\n", num)
+		if num == 0 {
+			this.ajaxMsg("删除失败", MSG_ERR_Resources)
+		}
+	} else {
+		this.ajaxMsg("删除失败", MSG_ERR_Resources)
 	}
-	this.ajaxMsg("", MSG_OK)
+	this.ajaxMsg("删除成功", MSG_OK)
 	return
 }
 

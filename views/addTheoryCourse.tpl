@@ -141,7 +141,7 @@
 				
 				$.ajax({
 					type:"POST",
-					url:"{{urlfor "HomeController.TheoryCourseAddAction"}}",
+					url:"/home/add/action",
 					data:$("#addCourse").serialize(),
 					async:false,
 					error:function(request){
@@ -149,11 +149,11 @@
 						
 					},
 					success:function(data){
-						if(data.status==0){
-							alert("新增成功")
+						if(data.status==200){
+							alert(data.message)
 							window.location.href="/home/add"
 						}else{
-							alert("新增失败，已有重复的课程代码")
+							alert(data.message)
 						}
 						
 					}

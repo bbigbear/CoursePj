@@ -122,18 +122,18 @@
 			function UpdataInput(){
 				$.ajax({
 					type:"POST",
-					url:"{{urlfor "PracticeController.PracticeUpdata"}}",
+					url:"/practice/updata",
 					data:$("#editPractice").serialize(),
 					async:false,
 					error:function(request){
 						alert("post error")				
 					},
 					success:function(data){
-						if(data.status==0){
-							alert("更新成功")
+						if(data.status==200){
+							alert(data.message)
 							window.location.href="/practice"
 						}else{
-							alert("更新失败")
+							alert(data.message)
 						}
 						
 					}
@@ -146,18 +146,20 @@
 				var year=document.getElementById("year")
 				$.ajax({
 					type:"POST",
-					url:"{{urlfor "PracticeController.PracticeDelete"}}",
+					//contentType:"application/json;charset=utf-8",
+					url:"/practice/delete",
 					data:{pid:pid.value,year:year.value},
+					//data:JSON.stringify({'pid':pid.value,'year':parseInt(year.value)}),
 					async:false,
 					error:function(request){
 						alert("post error")				
 					},
 					success:function(data){
-						if(data.status==0){
-							alert("删除成功")
+						if(data.status==200){
+							alert(data.message)
 							window.location.href="/practice"
 						}else{
-							alert("删除失败")
+							alert(data.message)
 						}
 						
 					}

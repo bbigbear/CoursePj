@@ -117,20 +117,20 @@
 				var pmname=document.getElementById("plan_list")
 				//alert(pmname.value)
 				if($("#plan_list").val()!=null){
-					$.ajax({  
-					    url: "{{urlfor "CopyPlanController.PPCopy"}}",  
+					$.ajax({ 
+						type: "POST", 
+					    url: "/copyplan/profession/copy",  
 					    data: { 
 							pmname: pmname.value,
 							year: year.value,
 							faculty: {{.f}}
-						},    
-					    type: "POST",
+						},					    
 						async:false,
 						error:function(data){
 							alert("post error")
 						},
 					    success:function(data){  
-					        if(data.status==0){
+					        if(data.status==200){
 								alert("复制成功")
 								window.location.href="/copyplan/profession/search?year="+year.value+"&faculty="+{{.f}}
 							}else{
@@ -148,7 +148,7 @@
 				var pmname=document.getElementById("open_class_list")
 				if($("#open_class_list").val()!=null){
 					$.ajax({  
-					    url: "{{urlfor "CopyPlanController.PPRemove"}}",  
+					    url: "/copyplan/profession/remove",  
 					    data: { 
 							pmname: pmname.value,
 							year: year.value,
@@ -160,7 +160,7 @@
 							alert("post error")
 						},
 					    success:function(data){  
-					        if(data.status==0){
+					        if(data.status==200){
 								alert("移除成功")
 								window.location.href="/copyplan/profession/search?year="+{{.y}}+"&faculty="+{{.f}}
 							}else{

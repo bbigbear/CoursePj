@@ -111,7 +111,7 @@
 				
 				$.ajax({
 					type:"POST",
-					url:"{{urlfor "PracticeController.PracticeAddAction"}}",
+					url:"/practice/add/action",
 					data:$("#addPractice").serialize(),
 					async:false,
 					error:function(request){
@@ -119,11 +119,11 @@
 						
 					},
 					success:function(data){
-						if(data.status==0){
-							alert("新增成功")
+						if(data.status==200){
+							alert(data.message)
 							window.location.href="/practice/add"
 						}else{
-							alert("新增失败，已有重复的课程代码")
+							alert(data.message)
 						}
 						
 					}

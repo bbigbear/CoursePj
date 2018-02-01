@@ -93,7 +93,7 @@
 				
 				$.ajax({
 					type:"POST",
-					url:"{{urlfor "PmController.PmAddAction"}}",
+					url:"/pm/add/action",
 					data:$("#addPm").serialize(),
 					async:false,
 					error:function(request){
@@ -101,11 +101,11 @@
 						
 					},
 					success:function(data){
-						if(data.status==0){
-							alert("新增成功")
+						if(data.status==200){
+							alert(data.message)
 							window.location.href="/pm/add"
 						}else{
-							alert("新增失败")
+							alert(data.message)
 						}
 						
 					}

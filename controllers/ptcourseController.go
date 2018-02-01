@@ -115,7 +115,9 @@ func (this *PTCourseController) Setcourse() {
 	fmt.Println(pmid)
 	fmt.Println(cidlist)
 	fmt.Println(pmidlist)
-
+	if cid == "" || pmid == "" {
+		this.ajaxMsg("cid,pmid不能为空", MSG_ERR_Param)
+	}
 	o := orm.NewOrm()
 	cid_count := len(cidlist) - 1
 	pmid_count := len(pmidlist)
@@ -137,25 +139,25 @@ func (this *PTCourseController) Setcourse() {
 			//先查询再建立
 			num, err := o.QueryTable(pt).Filter("Cid", ci).Filter("Pmid", pmi).Count()
 			if err != nil {
-				this.ajaxMsg("", MSG_ERR)
+				this.ajaxMsg("新增失败", MSG_ERR_Resources)
 				fmt.Println("查询失败")
 			}
 			fmt.Println("query num:", num)
 			if num == 0 {
 				id, err := o.Insert(&ptcourse)
 				if err != nil {
-					this.ajaxMsg("", MSG_ERR)
+					this.ajaxMsg("新增失败", MSG_ERR_Resources)
 					fmt.Println("插入失败")
 				}
 				fmt.Println(id)
 			} else {
-				this.ajaxMsg("", MSG_ERR)
+				this.ajaxMsg("新增失败,存在相同的课程", MSG_ERR_Resources)
 			}
 
 		}
 	}
 	fmt.Println("插入成功")
-	this.ajaxMsg("", MSG_OK)
+	this.ajaxMsg("设置成功", MSG_OK)
 	return
 
 }
@@ -212,10 +214,13 @@ func (this *PTCourseController) PTCourseDelete() {
 	pmid := this.Input().Get("pmid")
 	fmt.Println("pmid:", pmid)
 	year := this.Input().Get("year")
-
 	//取其中的pmid
 	reg := regexp.MustCompile(`[[:digit:]]+`)
 	pmidlist := reg.FindAllString(pmid, -1)
+
+	if cname == "" || pmid == "" || year == "" {
+		this.ajaxMsg("cname,pmid,year 参数不能为空", MSG_ERR_Param)
+	}
 
 	o := orm.NewOrm()
 	tc := new(models.TheoryCourse)
@@ -229,11 +234,16 @@ func (this *PTCourseController) PTCourseDelete() {
 			if err == nil {
 				fmt.Printf("删除成功")
 				fmt.Printf("Result delCid Nums: %d\n", num)
+				if num == 0 {
+					this.ajaxMsg("删除失败", MSG_ERR_Resources)
+				}
 			}
+		} else {
+			this.ajaxMsg("删除失败", MSG_ERR_Resources)
 		}
 	}
 
-	this.ajaxMsg("", MSG_OK)
+	this.ajaxMsg("删除成功", MSG_OK)
 	return
 
 }

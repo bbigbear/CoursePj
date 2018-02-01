@@ -79,7 +79,7 @@
 				var zxf=llxiaoji+sjxiaoji
 				$.ajax({
 					type:"POST",
-					url:"{{urlfor "PGCreditController.PgcSave"}}",
+					url:"/pgcredit/save",
 					data:{
 						pmname:{{.pmname}},
 						year:{{.y}},
@@ -98,7 +98,7 @@
 						
 					},
 					success:function(data){
-						if(data.status==0){
+						if(data.status==200){
 							alert("保存成功")
 							window.location.href="/pgcredit/search?year="+{{.y}}+"&faculty="+{{.f}}
 						}else{
@@ -126,7 +126,7 @@
 						
 					},
 					success:function(data){
-						if(data.status==0){
+						if(data.status==200){
 							alert("新增成功")
 							window.location.href="/pm/add"
 						}else{

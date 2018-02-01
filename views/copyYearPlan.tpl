@@ -140,7 +140,7 @@
 				if(year.value!=year_right.value){
 					if($("#left_list").val()!=null){
 					$.ajax({  
-					    url: "{{urlfor "CopyPlanController.GYCopy"}}",  
+					    url: "/copyplan/year/copy",  
 					    data: { 
 							plname: plname.value,
 							right_year: year_right.value,
@@ -153,7 +153,7 @@
 							alert("post error")
 						},
 					    success:function(data){  
-					        if(data.status==0){
+					        if(data.status==200){
 								alert("复制成功")
 								window.location.href="/copyplan/year/search?year="+year.value+"&faculty="+{{.f}}+"&year_right="+year_right.value
 							}else{
@@ -176,7 +176,7 @@
 				var year_right=document.getElementById("year_right")
 				if($("#right_list").val()!=null){
 					$.ajax({  
-					    url: "{{urlfor "CopyPlanController.GYRemove"}}",  
+					    url: "/copyplan/year/remove",  
 					    data: { 
 							pmname: pmname.value,
 							year: year_right.value,
@@ -188,7 +188,7 @@
 							alert("post error")
 						},
 					    success:function(data){  
-					        if(data.status==0){
+					        if(data.status==200){
 								alert("移除成功")
 								window.location.href="/copyplan/year/search?year="+year.value+"&faculty="+{{.f}}
 							}else{

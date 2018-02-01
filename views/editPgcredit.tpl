@@ -78,7 +78,7 @@
 				alert(id)
 				$.ajax({
 					type:"POST",
-					url:"{{urlfor "PGCreditController.PgcUpdate"}}",
+					url:"/pgcredit/updata",
 					data:{
 						id:id,
 						year:{{.y}},
@@ -97,7 +97,7 @@
 						alert("post error")						
 					},
 					success:function(data){
-						if(data.status==0){
+						if(data.status==200){
 							alert("更新成功")
 							window.location.href="/pgcredit/edit?pmname="+{{.pmname}}+"&year="+{{.y}}+"&faculty="+{{.f}}
 						}else{
@@ -125,14 +125,14 @@
 			var id=	$("#id").val()
 				$.ajax({
 					type:"POST",
-					url:"{{urlfor "PGCreditController.PgcDel"}}",
+					url:"/pgcredit/delete",
 					data:{id:id},
 					async:false,
 					error:function(request){
 						alert("post error")				
 					},
 					success:function(data){
-						if(data.status==0){
+						if(data.status==200){
 							alert("删除成功")
 							window.location.href="/pgcredit/search?year="+{{.y}}+"&faculty="+{{.f}}
 						}else{
